@@ -1,0 +1,14 @@
+.DS_Store
+
+venv/
+env/
+
+*.log
+*.pot
+*.pyc
+__pycache__/
+.idea/
+
+.env
+
+data/

@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  support:
+    restart: always
+    build:
+      context: ./courses
+    ports:
+      - "8000:8000"
+    command: ["./courses_run.bash"]
+    env_file: ./.env

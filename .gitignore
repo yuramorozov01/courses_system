@@ -1,7 +1,6 @@
 .DS_Store
 
 venv/
-env/
 
 *.log
 *.pot

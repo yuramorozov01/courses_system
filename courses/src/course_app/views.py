@@ -7,6 +7,10 @@ class CourseViewSet(viewsets.ModelViewSet):
     '''
     create:
         Create a new course.
+
+    destroy:
+        Delete a Course.
+        Only author can delete this ticket.
     '''
 
     permission_classes = [permissions.IsAuthenticated]
@@ -14,6 +18,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         querysets_dict = {
             'create': Course.objects.filter(author=self.request.user.id),
+            'destroy': Course.objects.filter(author=self.request.user.id),
         }
         queryset = querysets_dict.get(self.action)
         return queryset

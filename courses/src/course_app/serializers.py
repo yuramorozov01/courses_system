@@ -37,3 +37,17 @@ class CourseDetailsSerializer(serializers.ModelSerializer):
         model = Course
         fields = '__all__'
         read_only_fields = ['title', 'created_at', 'starts_at', 'ends_at', 'author', 'teachers', 'students', 'status']
+
+
+class CourseShortDetailsSerializer(serializers.ModelSerializer):
+    '''Serializer for a specified course
+    This serializer provides short information about course.
+    '''
+
+    author = CustomUserSerializer(read_only=True)
+    status = serializers.CharField(source='get_status_display')
+
+    class Meta:
+        model = Course
+        exclude = ['created_at', 'students', 'teachers']
+        read_only_fields = ['title', 'starts_at', 'ends_at', 'author', 'status']

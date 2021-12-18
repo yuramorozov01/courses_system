@@ -33,6 +33,7 @@ class Course(models.Model):
     )
     teachers = models.ManyToManyField(
         get_user_model(),
+        blank=True,
         related_name='teaching_courses'
     )
     students = models.ManyToManyField(

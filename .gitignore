@@ -11,3 +11,6 @@ __pycache__/
 .env
 
 data/
+
+migrations/*
+!migrations/__init__.py

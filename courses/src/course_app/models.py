@@ -49,7 +49,3 @@ class Course(models.Model):
     class Meta:
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
-        permissions = [
-            ('can_add_teacher', 'Can add teacher to this course'),
-            ('can_add_student', 'Can add student to this course'),
-        ]

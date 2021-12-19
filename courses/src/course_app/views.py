@@ -63,7 +63,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         return serializer_class
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user.id, teachers=(self.request.user.id,))
+        serializer.save(author=self.request.user, teachers=(self.request.user.id,))
 
     @action(methods=['GET'], detail=False)
     def teaching(self, request):

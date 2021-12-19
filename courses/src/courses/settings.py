@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'djoser',
     'drf_yasg',
 
+    'base_app',
     'course_app',
     'lecture_app',
 ]

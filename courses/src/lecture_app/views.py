@@ -2,7 +2,8 @@ from django.db.models import Q
 from lecture_app.models import Lecture, LectureFile
 from lecture_app.serializers import (LectureCreateSerializer,
                                      LectureDetailsSerializer,
-                                     LectureShortDetailsSerializer)
+                                     LectureShortDetailsSerializer,
+                                     LectureUpdateSerializer)
 from rest_framework import status, permissions, viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -55,6 +56,8 @@ class LectureViewSet(viewsets.ModelViewSet):
             'create': LectureCreateSerializer,
             'retrieve': LectureDetailsSerializer,
             'list': LectureShortDetailsSerializer,
+            'update': LectureUpdateSerializer,
+            'partial_update': LectureUpdateSerializer,
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class

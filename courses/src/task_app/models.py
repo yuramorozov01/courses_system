@@ -70,8 +70,8 @@ class Task(models.Model):
         on_delete=models.CASCADE,
         related_name='tasks'
     )
-    text = models.TextField('Text', empty=True, max_length=8192)
-    link = models.URLField('Link', null=True, empty=True)
+    text = models.TextField('Text', blank=True, max_length=8192)
+    link = models.URLField('Link', null=True, blank=True)
     author = models.ForeignKey(
         get_user_model(),
         verbose_name='Author',

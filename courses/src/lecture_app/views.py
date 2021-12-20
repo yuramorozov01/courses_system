@@ -2,12 +2,12 @@ from django.db.models import Q
 from lecture_app.models import Lecture, LectureFile
 from lecture_app.serializers import (LectureCreateSerializer,
                                      LectureDetailsSerializer,
-                                     LectureShortDetailsSerializer,
-                                     LectureUpdateSerializer,
                                      LectureFileCreateSerializer,
                                      LectureFileDetailsSerializer,
-                                     LectureFileUpdateSerializer)
-from rest_framework import permissions, viewsets, serializers
+                                     LectureFileUpdateSerializer,
+                                     LectureShortDetailsSerializer,
+                                     LectureUpdateSerializer)
+from rest_framework import permissions, serializers, viewsets
 
 
 class LectureViewSet(viewsets.ModelViewSet):

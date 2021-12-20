@@ -1,6 +1,7 @@
-import uuid
-from django.conf import settings
 import os
+import uuid
+
+from django.conf import settings
 
 
 def get_unique_filename(instance, filename):

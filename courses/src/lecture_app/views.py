@@ -65,7 +65,6 @@ class LectureViewSet(viewsets.ModelViewSet):
         return serializer_class
 
     def perform_create(self, serializer):
-        queryset = self.get_queryset()
         try:
             Course.objects\
                 .filter(teachers=self.request.user.id)\
@@ -129,7 +128,6 @@ class LectureFileViewSet(viewsets.ModelViewSet):
         return serializer_class
 
     def perform_create(self, serializer):
-        queryset = self.get_queryset()
         try:
             Lecture.objects\
                 .filter(course__teachers=self.request.user.id)\

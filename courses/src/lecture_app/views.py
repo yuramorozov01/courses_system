@@ -1,4 +1,5 @@
 from django.db.models import Q
+from course_app.models import Course
 from lecture_app.models import Lecture, LectureFile
 from lecture_app.serializers import (LectureCreateSerializer,
                                      LectureDetailsSerializer,
@@ -66,9 +67,11 @@ class LectureViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         queryset = self.get_queryset()
         try:
-            queryset.get(course=self.request.data.get('course'))
+            Course.objects\
+                .filter(teachers=self.request.user.id)\
+                .get(pk=self.request.data.get('course'))
             serializer.save(author=self.request.user)
-        except Lecture.DoesNotExist:
+        except Course.DoesNotExist:
             raise serializers.ValidationError('You can add lectures only in teaching courses')
 
 

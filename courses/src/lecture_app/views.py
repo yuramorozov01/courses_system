@@ -45,7 +45,7 @@ class LectureViewSet(viewsets.ModelViewSet):
             ),
             'list': Lecture.objects.filter(
                 Q(course__teachers=self.request.user.id) | Q(course__students=self.request.user.id)
-            ),
+            ).filter(course=self.request.data.get('course')),
             'update': Lecture.objects.filter(course__teachers=self.request.user.id),
             'partial_update': Lecture.objects.filter(course__teachers=self.request.user.id),
         }
@@ -107,7 +107,7 @@ class LectureFileViewSet(viewsets.ModelViewSet):
             ),
             'list': LectureFile.objects.filter(
                 Q(lecture__course__teachers=self.request.user.id) | Q(lecture__course__students=self.request.user.id)
-            ),
+            ).filter(lecture=self.request.data.get('lecture')),
             'update': LectureFile.objects.filter(lecture__course__teachers=self.request.user.id),
             'partial_update': LectureFile.objects.filter(lecture__course__teachers=self.request.user.id),
         }

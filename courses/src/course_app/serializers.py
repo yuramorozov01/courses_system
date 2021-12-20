@@ -1,14 +1,8 @@
+from base_app.serializers import CustomUserSerializer
 from course_app.models import Course
 from django.contrib.auth import get_user_model
+from lecture_app.serializers import LectureShortDetailsSerializer
 from rest_framework import serializers
-
-
-class CustomUserSerializer(serializers.ModelSerializer):
-    '''Serializer for an user'''
-
-    class Meta:
-        model = get_user_model()
-        fields = ['id', 'username', 'email']
 
 
 class CourseCreateSerializer(serializers.ModelSerializer):
@@ -32,6 +26,7 @@ class CourseDetailsSerializer(serializers.ModelSerializer):
     teachers = CustomUserSerializer(read_only=True, many=True)
     students = CustomUserSerializer(read_only=True, many=True)
     status = serializers.CharField(source='get_status_display')
+    lectures = LectureShortDetailsSerializer(read_only=True, many=True)
 
     class Meta:
         model = Course

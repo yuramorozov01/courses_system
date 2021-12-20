@@ -1,6 +1,6 @@
 from base_app.serializers import CustomUserSerializer
-from task_app.models import TaskStatement, TaskStatementFile, Task, TaskFile
 from rest_framework import serializers
+from task_app.models import Task, TaskFile, TaskStatement, TaskStatementFile
 
 
 class TaskStatementCreateSerializer(serializers.ModelSerializer):

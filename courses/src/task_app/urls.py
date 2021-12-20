@@ -1,6 +1,6 @@
 from django.urls import include, path
-from task_app import views
 from rest_framework.routers import DefaultRouter
+from task_app import views
 
 router = DefaultRouter()
 router.register(r'taskstmt', views.TaskStatementViewSet, basename='Task statement')

@@ -1,5 +1,5 @@
-from django.db.models import Q
 from course_app.models import Course
+from django.db.models import Q
 from lecture_app.models import Lecture, LectureFile
 from lecture_app.serializers import (LectureCreateSerializer,
                                      LectureDetailsSerializer,

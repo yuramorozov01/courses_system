@@ -1,11 +1,11 @@
 from django.db.models import Q
 from lecture_app.models import Lecture
-from task_app.models import TaskStatement, TaskStatementFile, Task, TaskFile
+from rest_framework import permissions, serializers, viewsets
+from task_app.models import Task, TaskFile, TaskStatement, TaskStatementFile
 from task_app.serializers import (TaskStatementCreateSerializer,
                                   TaskStatementDetailsSerializer,
                                   TaskStatementShortDetailsSerializer,
                                   TaskStatementUpdateSerializer)
-from rest_framework import permissions, serializers, viewsets
 
 
 class TaskStatementViewSet(viewsets.ModelViewSet):

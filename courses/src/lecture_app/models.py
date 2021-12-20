@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from lecture_app.utils import get_unique_filename
+from base_app.utils import get_unique_filename
 
 
 class Lecture(models.Model):

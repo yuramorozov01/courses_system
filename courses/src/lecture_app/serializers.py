@@ -1,5 +1,6 @@
 from base_app.serializers import CustomUserSerializer
 from lecture_app.models import Lecture, LectureFile
+from task_app.serializers import TaskStatementShortDetailsSerializer
 from rest_framework import serializers
 
 
@@ -11,7 +12,7 @@ class LectureCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lecture
         fields = '__all__'
-        read_only_fields = ['author', 'created_at']
+        read_only_fields = ['author', 'created_at', 'course']
 
 
 class LectureFileDetailsSerializer(serializers.ModelSerializer):
@@ -34,6 +35,7 @@ class LectureDetailsSerializer(serializers.ModelSerializer):
 
     author = CustomUserSerializer(read_only=True)
     files = LectureFileDetailsSerializer(read_only=True, many=True)
+    task_statements = TaskStatementShortDetailsSerializer(read_only=True, many=True)
 
     class Meta:
         model = Lecture
@@ -75,7 +77,7 @@ class LectureFileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = LectureFile
         fields = '__all__'
-        read_only_fields = ['author']
+        read_only_fields = ['author', 'lecture']
 
 
 class LectureFileUpdateSerializer(serializers.ModelSerializer):

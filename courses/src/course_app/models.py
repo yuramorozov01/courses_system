@@ -43,9 +43,9 @@ class Course(models.Model):
     )
     status = models.TextField(choices=StatusChoices.choices, default=StatusChoices.OPEN)
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
+
+    def __str__(self):
+        return self.title

@@ -1,6 +1,6 @@
+from base_app.utils import get_unique_filename
 from django.contrib.auth import get_user_model
 from django.db import models
-from lecture_app.utils import get_unique_filename
 
 
 class Lecture(models.Model):
@@ -24,12 +24,12 @@ class Lecture(models.Model):
     )
     created_at = models.DateTimeField('Creation time', auto_now_add=True)
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'Lecture'
         verbose_name_plural = 'Lectures'
+
+    def __str__(self):
+        return self.title
 
 
 class LectureFile(models.Model):
@@ -51,9 +51,9 @@ class LectureFile(models.Model):
         related_name='own_lecture_files'
     )
 
-    def __str__(self):
-        return self.file.path
-
     class Meta:
-        verbose_name = 'File'
-        verbose_name_plural = 'Files'
+        verbose_name = 'Lecture file'
+        verbose_name_plural = 'Lecture files'
+
+    def __str__(self):
+        return f'{self.author.username} | {self.file.path}'

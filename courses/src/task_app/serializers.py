@@ -67,3 +67,26 @@ class TaskStatementUpdateSerializer(serializers.ModelSerializer):
         read_only_fields = ['lecture', 'author',  'created_at']
 
 
+class TaskStatementFileCreateSerializer(serializers.ModelSerializer):
+    '''Serializer for creating task statement files'''
+
+    author = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = TaskStatementFile
+        fields = '__all__'
+        read_only_fields = ['author']
+
+
+class TaskStatementFileUpdateSerializer(serializers.ModelSerializer):
+    '''Serializer for updating a specified task statement file.
+    With this serializer task statement file can be updated only by a course teacher.
+    '''
+
+    file = serializers.FileField(allow_empty_file=True)
+    author = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = TaskStatementFile
+        fields = '__all__'
+        read_only_fields = ['task_statement', 'author']

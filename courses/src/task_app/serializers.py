@@ -155,3 +155,28 @@ class TaskUpdateSerializer(serializers.ModelSerializer):
         model = Task
         fields = '__all__'
         read_only_fields = ['task_statement', 'author',  'created_at']
+
+
+class TaskFileCreateSerializer(serializers.ModelSerializer):
+    '''Serializer for creating task files'''
+
+    author = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = TaskFile
+        fields = '__all__'
+        read_only_fields = ['author']
+
+
+class TaskFileUpdateSerializer(serializers.ModelSerializer):
+    '''Serializer for updating a specified task file.
+    With this serializer task file can be updated only by a task file author.
+    '''
+
+    file = serializers.FileField(allow_empty_file=True)
+    author = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = TaskFile
+        fields = '__all__'
+        read_only_fields = ['task', 'author']

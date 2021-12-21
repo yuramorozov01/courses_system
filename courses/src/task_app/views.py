@@ -53,7 +53,7 @@ class TaskStatementViewSet(viewsets.ModelViewSet):
             ),
             'list': TaskStatement.objects.filter(
                 Q(lecture__course__teachers=self.request.user.id) | Q(lecture__course__students=self.request.user.id)
-            ).filter(lecture=self.request.data.get('lecture')),
+            ).filter(lecture=self.kwargs.get('lecture_pk')),
             'update': TaskStatement.objects.filter(lecture__course__teachers=self.request.user.id),
             'partial_update': TaskStatement.objects.filter(lecture__course__teachers=self.request.user.id),
         }
@@ -75,7 +75,7 @@ class TaskStatementViewSet(viewsets.ModelViewSet):
         try:
             Lecture.objects\
                 .filter(course__teachers=self.request.user.id)\
-                .get(pk=self.request.data.get('lecture'))
+                .get(pk=self.kwargs.get('lecture_pk'))
             serializer.save(author=self.request.user)
         except Lecture.DoesNotExist:
             raise serializers.ValidationError('You can add task statements only in teaching courses')
@@ -118,7 +118,7 @@ class TaskStatementFileViewSet(viewsets.ModelViewSet):
             'list': TaskStatementFile.objects.filter(
                 Q(task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(task_statement__lecture__course__students=self.request.user.id)
-            ).filter(task_statement=self.request.data.get('task_statement')),
+            ).filter(task_statement=self.kwargs.get('task_statement_pk')),
             'update': TaskStatementFile.objects.filter(task_statement__lecture__course__teachers=self.request.user.id),
             'partial_update': TaskStatementFile.objects.filter(
                 task_statement__lecture__course__teachers=self.request.user.id
@@ -142,7 +142,7 @@ class TaskStatementFileViewSet(viewsets.ModelViewSet):
         try:
             TaskStatement.objects\
                 .filter(lecture__course__teachers=self.request.user.id)\
-                .get(pk=self.request.data.get('task_statement'))
+                .get(pk=self.kwargs.get('task_statement_pk'))
             serializer.save(author=self.request.user)
         except TaskStatement.DoesNotExist:
             raise serializers.ValidationError('You can add task statement files only in teaching courses')
@@ -187,7 +187,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             'list': Task.objects.filter(
                 Q(task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(author=self.request.user.id)
-            ).filter(task_statement=self.request.data.get('task_statement')),
+            ).filter(task_statement=self.kwargs.get('task_statement_pk')),
             'update': Task.objects.filter(author=self.request.user.id),
             'partial_update': Task.objects.filter(author=self.request.user.id),
         }
@@ -209,7 +209,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         try:
             TaskStatement.objects\
                 .filter(lecture__course__students=self.request.user.id)\
-                .get(pk=self.request.data.get('task_statement'))
+                .get(pk=self.kwargs.get('task_statement_pk'))
             serializer.save(author=self.request.user)
         except TaskStatement.DoesNotExist:
             raise serializers.ValidationError('You can add tasks only in studying courses')
@@ -252,7 +252,7 @@ class TaskFileViewSet(viewsets.ModelViewSet):
             'list': TaskFile.objects.filter(
                 Q(task__task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(author=self.request.user.id)
-            ).filter(task=self.request.data.get('task')),
+            ).filter(task=self.kwargs.get('task_pk')),
             'update': TaskFile.objects.filter(author=self.request.user.id),
             'partial_update': TaskFile.objects.filter(author=self.request.user.id),
         }
@@ -274,7 +274,7 @@ class TaskFileViewSet(viewsets.ModelViewSet):
         try:
             Task.objects\
                 .filter(task_statement__lecture__course__students=self.request.user.id)\
-                .get(pk=self.request.data.get('task'))
+                .get(pk=self.kwargs.get('task_pk'))
             serializer.save(author=self.request.user)
         except Task.DoesNotExist:
             raise serializers.ValidationError('You can add task files only in studying courses')

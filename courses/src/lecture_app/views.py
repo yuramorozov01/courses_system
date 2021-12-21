@@ -46,7 +46,7 @@ class LectureViewSet(viewsets.ModelViewSet):
             ),
             'list': Lecture.objects.filter(
                 Q(course__teachers=self.request.user.id) | Q(course__students=self.request.user.id)
-            ).filter(course=self.request.data.get('course')),
+            ).filter(course=self.kwargs.get('course_pk')),
             'update': Lecture.objects.filter(course__teachers=self.request.user.id),
             'partial_update': Lecture.objects.filter(course__teachers=self.request.user.id),
         }
@@ -68,7 +68,7 @@ class LectureViewSet(viewsets.ModelViewSet):
         try:
             Course.objects\
                 .filter(teachers=self.request.user.id)\
-                .get(pk=self.request.data.get('course'))
+                .get(pk=self.kwargs.get('course_pk'))
             serializer.save(author=self.request.user)
         except Course.DoesNotExist:
             raise serializers.ValidationError('You can add lectures only in teaching courses')
@@ -109,7 +109,7 @@ class LectureFileViewSet(viewsets.ModelViewSet):
             ),
             'list': LectureFile.objects.filter(
                 Q(lecture__course__teachers=self.request.user.id) | Q(lecture__course__students=self.request.user.id)
-            ).filter(lecture=self.request.data.get('lecture')),
+            ).filter(lecture=self.kwargs.get('lecture_pk')),
             'update': LectureFile.objects.filter(lecture__course__teachers=self.request.user.id),
             'partial_update': LectureFile.objects.filter(lecture__course__teachers=self.request.user.id),
         }
@@ -131,7 +131,7 @@ class LectureFileViewSet(viewsets.ModelViewSet):
         try:
             Lecture.objects\
                 .filter(course__teachers=self.request.user.id)\
-                .get(pk=self.request.data.get('lecture'))
+                .get(pk=self.kwargs.get('lecture_pk'))
             serializer.save(author=self.request.user)
         except Lecture.DoesNotExist:
             raise serializers.ValidationError('You can add lecture files only in teaching courses')

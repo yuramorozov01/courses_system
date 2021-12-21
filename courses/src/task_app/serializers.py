@@ -11,7 +11,7 @@ class TaskStatementCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskStatement
         fields = '__all__'
-        read_only_fields = ['author', 'created_at']
+        read_only_fields = ['author', 'created_at', 'lecture']
 
 
 class TaskStatementFileDetailsSerializer(serializers.ModelSerializer):
@@ -89,7 +89,7 @@ class TaskStatementFileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskStatementFile
         fields = '__all__'
-        read_only_fields = ['author']
+        read_only_fields = ['author', 'task_statement']
 
 
 class TaskStatementFileUpdateSerializer(serializers.ModelSerializer):
@@ -114,7 +114,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
-        read_only_fields = ['author', 'created_at']
+        read_only_fields = ['author', 'created_at', 'task_statement']
 
 
 class TaskFileDetailsSerializer(serializers.ModelSerializer):
@@ -165,7 +165,7 @@ class TaskFileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskFile
         fields = '__all__'
-        read_only_fields = ['author']
+        read_only_fields = ['author', 'task']
 
 
 class TaskFileUpdateSerializer(serializers.ModelSerializer):

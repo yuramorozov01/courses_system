@@ -21,6 +21,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('api/v1/', include('course_app.urls')),
+    path('api/v1/', include('lecture_app.urls')),
+    path('api/v1/', include('task_app.urls')),
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),

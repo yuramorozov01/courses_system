@@ -12,7 +12,7 @@ class LectureCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lecture
         fields = '__all__'
-        read_only_fields = ['author', 'created_at']
+        read_only_fields = ['author', 'created_at', 'course']
 
 
 class LectureFileDetailsSerializer(serializers.ModelSerializer):
@@ -77,7 +77,7 @@ class LectureFileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = LectureFile
         fields = '__all__'
-        read_only_fields = ['author']
+        read_only_fields = ['author', 'lecture']
 
 
 class LectureFileUpdateSerializer(serializers.ModelSerializer):

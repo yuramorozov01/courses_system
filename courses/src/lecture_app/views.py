@@ -66,10 +66,10 @@ class LectureViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         try:
-            Course.objects\
+            course = Course.objects\
                 .filter(teachers=self.request.user.id)\
                 .get(pk=self.kwargs.get('course_pk'))
-            serializer.save(author=self.request.user)
+            serializer.save(author=self.request.user, course=course)
         except Course.DoesNotExist:
             raise serializers.ValidationError('You can add lectures only in teaching courses')
 
@@ -129,9 +129,9 @@ class LectureFileViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         try:
-            Lecture.objects\
+            lecture = Lecture.objects\
                 .filter(course__teachers=self.request.user.id)\
                 .get(pk=self.kwargs.get('lecture_pk'))
-            serializer.save(author=self.request.user)
+            serializer.save(author=self.request.user, lecture=lecture)
         except Lecture.DoesNotExist:
             raise serializers.ValidationError('You can add lecture files only in teaching courses')

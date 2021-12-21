@@ -78,6 +78,7 @@ class Task(models.Model):
         on_delete=models.CASCADE,
         related_name='own_tasks'
     )
+    created_at = models.DateTimeField('Creation time', auto_now_add=True)
 
     class Meta:
         verbose_name = 'Task'

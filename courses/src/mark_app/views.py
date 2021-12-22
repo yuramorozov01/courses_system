@@ -141,6 +141,9 @@ class MessageViewSet(viewsets.ModelViewSet):
                     Q(task__task_statement__lecture__course__teachers=self.request.user.id) |
                     Q(task__author=self.request.user.id)
                 ).get(pk=self.kwargs.get('mark_pk'))
-            serializer.save(author=self.request.user, mark=mark)
+            parent = Message.objects.filter(mark=mark).get(pk=self.request.data.get('parent'))
+            serializer.save(author=self.request.user, mark=mark, parent=parent)
         except Task.DoesNotExist:
-            raise serializers.ValidationError('You can add messages only in teaching courses or ')
+            raise serializers.ValidationError('You can add messages only in teaching courses or in own tasks')
+        except Message.DoesNotExist:
+            raise serializers.ValidationError('Child message must be in the same mark as parent message!')

@@ -100,14 +100,7 @@ class MessageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'
-        read_only_fields = ['mark', 'author', 'created_at']
-
-    def validate(self, data):
-        # Check that child is in the same mark as parent
-        if data.get('parent') is not None:
-            if data.get('parent').mark != data.get('mark'):
-                raise serializers.ValidationError('Child message must be in the same mark as parent message!')
-        return data
+        read_only_fields = ['mark', 'author', 'parent', 'created_at']
 
 
 class MessageShortDetailsSerializer(serializers.ModelSerializer):

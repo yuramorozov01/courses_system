@@ -1,7 +1,7 @@
 from base_app.serializers import CustomUserSerializer
+from mark_app.serializers import MarkShortDetailsSerializer
 from rest_framework import serializers
 from task_app.models import Task, TaskFile, TaskStatement, TaskStatementFile
-from mark_app.serializers import MarkShortDetailsSerializer
 
 
 class TaskStatementCreateSerializer(serializers.ModelSerializer):

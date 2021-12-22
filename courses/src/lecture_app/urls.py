@@ -1,8 +1,7 @@
 from course_app.urls import router as course_router
-from lecture_app import views as lecture_views
 from django.urls import include, path
+from lecture_app import views as lecture_views
 from rest_framework_nested.routers import NestedSimpleRouter
-
 
 lecture_router = NestedSimpleRouter(course_router, r'course', lookup='course')
 lecture_router.register(

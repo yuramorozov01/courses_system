@@ -2,20 +2,19 @@ from django.db.models import Q
 from lecture_app.models import Lecture
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task, TaskFile, TaskStatement, TaskStatementFile
-from task_app.serializers import (TaskStatementCreateSerializer,
+from task_app.serializers import (TaskCreateSerializer, TaskDetailsSerializer,
+                                  TaskFileCreateSerializer,
+                                  TaskFileDetailsSerializer,
+                                  TaskFileUpdateSerializer,
+                                  TaskShortDetailsSerializer,
+                                  TaskStatementCreateSerializer,
                                   TaskStatementDetailsSerializer,
-                                  TaskStatementShortDetailsSerializer,
-                                  TaskStatementUpdateSerializer,
                                   TaskStatementFileCreateSerializer,
                                   TaskStatementFileDetailsSerializer,
                                   TaskStatementFileUpdateSerializer,
-                                  TaskCreateSerializer,
-                                  TaskDetailsSerializer,
-                                  TaskShortDetailsSerializer,
-                                  TaskUpdateSerializer,
-                                  TaskFileDetailsSerializer,
-                                  TaskFileCreateSerializer,
-                                  TaskFileUpdateSerializer)
+                                  TaskStatementShortDetailsSerializer,
+                                  TaskStatementUpdateSerializer,
+                                  TaskUpdateSerializer)
 
 
 class TaskStatementViewSet(viewsets.ModelViewSet):
@@ -179,7 +178,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         querysets_dict = {
             'create': Task.objects.filter(task_statement__lecture__course__students=self.request.user.id),
-            'destroy': Task.objects.filter(task_statement__lecture__course__students=self.request.user.id),
+            'destroy': Task.objects.filter(author=self.request.user.id),
             'retrieve': Task.objects.filter(
                 Q(task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(author=self.request.user.id)

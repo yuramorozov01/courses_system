@@ -44,6 +44,7 @@ class Course(models.Model):
     status = models.TextField(choices=StatusChoices.choices, default=StatusChoices.OPEN)
 
     class Meta:
+        ordering = ['starts_at']
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
 

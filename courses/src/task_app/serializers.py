@@ -1,6 +1,7 @@
 from base_app.serializers import CustomUserSerializer
 from rest_framework import serializers
 from task_app.models import Task, TaskFile, TaskStatement, TaskStatementFile
+from mark_app.serializers import MarkShortDetailsSerializer
 
 
 class TaskStatementCreateSerializer(serializers.ModelSerializer):
@@ -137,6 +138,7 @@ class TaskDetailsSerializer(serializers.ModelSerializer):
 
     author = CustomUserSerializer(read_only=True)
     files = TaskFileDetailsSerializer(read_only=True, many=True)
+    mark = MarkShortDetailsSerializer(read_only=True)
 
     class Meta:
         model = Task

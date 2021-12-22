@@ -25,6 +25,7 @@ class TaskStatement(models.Model):
     created_at = models.DateTimeField('Creation time', auto_now_add=True)
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Task statement'
         verbose_name_plural = 'Task statements'
 
@@ -56,7 +57,7 @@ class TaskStatementFile(models.Model):
         verbose_name_plural = 'Task statement files'
 
     def __str__(self):
-        return f'{self.author.username} | {self.file.path}'
+        return f'{self.author} | {self.file.path}'
 
 
 class Task(models.Model):
@@ -85,7 +86,7 @@ class Task(models.Model):
         verbose_name_plural = 'Tasks'
 
     def __str__(self):
-        return f'{self.author.username} | {self.created_at}'
+        return f'{self.author} | {self.created_at}'
 
 
 class TaskFile(models.Model):
@@ -112,4 +113,4 @@ class TaskFile(models.Model):
         verbose_name_plural = 'Task files'
 
     def __str__(self):
-        return f'{self.author.username} | {self.file.path}'
+        return f'{self.author} | {self.file.path}'

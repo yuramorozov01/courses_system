@@ -25,6 +25,7 @@ class Lecture(models.Model):
     created_at = models.DateTimeField('Creation time', auto_now_add=True)
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Lecture'
         verbose_name_plural = 'Lectures'
 
@@ -56,4 +57,4 @@ class LectureFile(models.Model):
         verbose_name_plural = 'Lecture files'
 
     def __str__(self):
-        return f'{self.author.username} | {self.file.path}'
+        return f'{self.author} | {self.file.path}'

@@ -1,15 +1,14 @@
 from django.db.models import Q
-from rest_framework import permissions, serializers, viewsets
-from task_app.models import Task
 from mark_app.models import Mark, Message
-from mark_app.serializers import (MarkCreateSerializer,
-                                  MarkDetailsSerializer,
+from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkShortDetailsSerializer,
                                   MarkUpdateSerializer,
                                   MessageCreateSerializer,
-                                  MessageShortDetailsSerializer,
                                   MessageDetailsSerializer,
+                                  MessageShortDetailsSerializer,
                                   MessageUpdateSerializer)
+from rest_framework import permissions, serializers, viewsets
+from task_app.models import Task
 
 
 class MarkViewSet(viewsets.ModelViewSet):

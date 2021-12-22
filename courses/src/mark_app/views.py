@@ -111,11 +111,11 @@ class MessageViewSet(viewsets.ModelViewSet):
             'destroy': Message.objects.filter(author=self.request.user.id),
             'retrieve': Message.objects.filter(
                 Q(mark__task__task_statement__lecture__course__teachers=self.request.user.id) |
-                Q(author=self.request.user.id)
+                Q(mark__task__author=self.request.user.id)
             ),
             'list': Message.objects.filter(
                 Q(mark__task__task_statement__lecture__course__teachers=self.request.user.id) |
-                Q(author=self.request.user.id)
+                Q(mark__task__author=self.request.user.id)
             ).filter(mark=self.kwargs.get('mark_pk')),
             'update': Message.objects.filter(author=self.request.user.id),
             'partial_update': Message.objects.filter(author=self.request.user.id),

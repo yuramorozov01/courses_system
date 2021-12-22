@@ -178,7 +178,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         querysets_dict = {
             'create': Task.objects.filter(task_statement__lecture__course__students=self.request.user.id),
-            'destroy': Task.objects.filter(task_statement__lecture__course__students=self.request.user.id),
+            'destroy': Task.objects.filter(author=self.request.user.id),
             'retrieve': Task.objects.filter(
                 Q(task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(author=self.request.user.id)

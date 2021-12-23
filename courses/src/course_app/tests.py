@@ -47,5 +47,21 @@ class CourseEndPointTestCase(BaseTestCase):
             'teachers': [self.users['qqq']['id'], self.users['new_teacher_1']['id']],
         }
         resp, resp_data = self.put(f'/api/v1/course/{resp_data["id"]}/', data, jwt)
-        print(resp_data)
+
         self.assertEqual(resp.status_code, 200)
+
+    def test_add_student_to_course(self):
+        jwt = self.auth('qqq')
+        data = {
+            'title': 'this is test title',
+            'starts_at': '2021-12-27',
+            'ends_at': '2022-02-13',
+        }
+        resp, resp_data = self.post('/api/v1/course/', data, jwt)
+
+        self.add_student_to_course(resp_data['id'], 'new_student_1')
+
+        jwt = self.auth('new_student_1')
+        resp, resp_data = self.get(f'/api/v1/course/{resp_data["id"]}/', data, jwt)
+        self.assertEqual(resp_data['title'], data['title'])
+        self.assertEqual(len(resp_data['students']), 1)

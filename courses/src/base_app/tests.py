@@ -55,3 +55,62 @@ class BaseTestCase(TestCase):
     def delete(self, url, data, jwt):
         resp = self.client.delete(url, data, HTTP_AUTHORIZATION='JWT ' + jwt, content_type='application/json')
         return resp, resp.json()
+
+    def create_course(self):
+        jwt = self.auth('qqq')
+        data = {
+            'title': 'this is test title',
+            'starts_at': '2021-12-27',
+            'ends_at': '2022-02-13',
+        }
+        resp, resp_data = self.post('/api/v1/course/', data, jwt)
+        return resp_data['id']
+
+    def create_lecture(self):
+        course_id = self.create_course()
+        jwt = self.auth('qqq')
+        data = {
+            'title': 'this is test title lecture',
+            'text': 'texllllllllllll',
+        }
+        resp, resp_data = self.post(f'/api/v1/course/{course_id}/lecture/', data, jwt)
+        return course_id, resp_data['id']
+
+    def create_task_statement(self):
+        course_id, lecture_id = self.create_lecture()
+        jwt = self.auth('qqq')
+        data = {
+            'title': 'task statement1',
+            'text': 'you should do it fast!',
+        }
+        resp, resp_data = self.post(f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/', data, jwt)
+        return course_id, lecture_id, resp_data['id']
+
+    def create_task(self):
+        course_id, lecture_id, task_statement_id = self.create_task_statement()
+        self.add_student_to_course(course_id, 'new_student_2')
+
+        jwt = self.auth('new_student_2')
+        data = {
+            'text': 'ooooooo moya oborona',
+            'link': 'https://github.com/yuramorozov01/courses_system',
+        }
+        resp, resp_data = self.post(
+            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/',
+            data,
+            jwt
+        )
+        return course_id, lecture_id, task_statement_id, resp_data['id']
+
+
+    def add_student_to_course(self, course_id, student_username):
+        jwt = self.auth('qqq')
+        resp, resp_data = self.get(f'/api/v1/course/{course_id}/', {}, jwt)
+        students = [student['id'] for student in resp_data['students']]
+        students.append(self.users[student_username]['id'])
+        teachers = [teacher['id'] for teacher in resp_data['teachers']]
+        data = {
+            'students': students,
+            'teachers': teachers,
+        }
+        resp, resp_data = self.patch(f'/api/v1/course/{course_id}/', data, jwt)

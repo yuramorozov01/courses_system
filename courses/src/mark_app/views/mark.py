@@ -1,7 +1,6 @@
 from django.db.models import Q
 from mark_app.models import Mark
-from mark_app.serializers import (MarkCreateSerializer,
-                                  MarkDetailsSerializer,
+from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkShortDetailsSerializer,
                                   MarkUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets

@@ -1,8 +1,7 @@
 from django.db.models import Q
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task, TaskStatement
-from task_app.serializers import (TaskCreateSerializer,
-                                  TaskDetailsSerializer,
+from task_app.serializers import (TaskCreateSerializer, TaskDetailsSerializer,
                                   TaskShortDetailsSerializer,
                                   TaskUpdateSerializer)
 

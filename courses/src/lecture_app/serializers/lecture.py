@@ -1,8 +1,9 @@
 from base_app.serializers import CustomUserSerializer
 from lecture_app.models import Lecture
-from rest_framework import serializers
-from task_app.serializers.task_statement import TaskStatementShortDetailsSerializer
 from lecture_app.serializers.lecture_file import LectureFileDetailsSerializer
+from rest_framework import serializers
+from task_app.serializers.task_statement import \
+    TaskStatementShortDetailsSerializer
 
 
 class LectureCreateSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from base_app.serializers import CustomUserSerializer
 from mark_app.models import Mark
-from rest_framework import serializers
 from mark_app.serializers.message import MessageDetailsSerializer
+from rest_framework import serializers
 
 
 class MarkCreateSerializer(serializers.ModelSerializer):

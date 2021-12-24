@@ -16,3 +16,6 @@ migrations/
 !migrations/__init__.py
 
 uploads/
+
+.pytest_cache/
+.coverage

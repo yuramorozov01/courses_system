@@ -1,4 +1,5 @@
 from base_app.tests import BaseTestCase
+from django.urls import reverse
 
 
 class TaskEndPointTestCase(BaseTestCase):
@@ -9,7 +10,10 @@ class TaskEndPointTestCase(BaseTestCase):
             'title': 'task statement1',
             'text': 'you should do it fast!',
         }
-        resp, resp_data = self.post(f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/', data, jwt)
+        url = reverse('task_statement-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id})
+        print(url)
+        resp, resp_data = self.post(url, data, jwt)
+
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(data['text'], resp_data['text'])
         self.assertEqual(self.users['qqq']['id'], resp_data['author']['id'])
@@ -17,11 +21,8 @@ class TaskEndPointTestCase(BaseTestCase):
     def test_get_task_statement_as_not_studying(self):
         course_id, lecture_id, task_statement_id = self.create_task_statement()
         jwt = self.auth('new_student_2')
-        resp, resp_data = self.get(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/',
-            {},
-            jwt
-        )
+        url = reverse('task_statement-detail', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'pk': task_statement_id})
+        resp, resp_data = self.get(url, {}, jwt)
 
         self.assertEqual(resp.status_code, 404)
 
@@ -30,11 +31,8 @@ class TaskEndPointTestCase(BaseTestCase):
         self.add_student_to_course(course_id, 'new_student_2')
 
         jwt = self.auth('new_student_2')
-        resp, resp_data = self.get(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/',
-            {},
-            jwt
-        )
+        url = reverse('task_statement-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id})
+        resp, resp_data = self.get(url, {}, jwt)
 
         self.assertEqual(len(resp_data), 1)
         self.assertEqual(resp.status_code, 200)
@@ -48,11 +46,8 @@ class TaskEndPointTestCase(BaseTestCase):
             'text': 'ooooooo moya oborona',
             'link': 'https://github.com/yuramorozov01/courses_system',
         }
-        resp, resp_data = self.post(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/',
-            data,
-            jwt
-        )
+        url = reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id})
+        resp, resp_data = self.post(url, data, jwt)
 
         self.assertEqual(resp_data['text'], data['text'])
         self.assertEqual(resp_data['author']['id'], self.users['new_student_2']['id'])
@@ -67,18 +62,12 @@ class TaskEndPointTestCase(BaseTestCase):
             'text': 'ooooooo moya oborona',
             'link': 'https://github.com/yuramorozov01/courses_system',
         }
-        resp, resp_data = self.post(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/',
-            data,
-            jwt
-        )
+        url = reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id})
+        resp, resp_data = self.post(url, data, jwt)
 
         jwt = self.auth('qqq')
-        resp, resp_data = self.get(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/',
-            data,
-            jwt
-        )
-        print(resp_data)
+        url = reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id})
+        resp, resp_data = self.get(url, {}, jwt)
+
         self.assertEqual(len(resp_data), 1)
         self.assertEqual(resp.status_code, 200)

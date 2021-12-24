@@ -1,4 +1,5 @@
 from base_app.tests import BaseTestCase
+from django.urls import reverse
 
 
 class MarkEndPointTestCase(BaseTestCase):
@@ -8,11 +9,16 @@ class MarkEndPointTestCase(BaseTestCase):
         data = {
             'mark_value': 9,
         }
-        resp, resp_data = self.post(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/{task_id}/mark/',
-            data,
-            jwt
+        url = reverse(
+            'mark-list',
+            kwargs={
+                'course_pk': course_id,
+                'lecture_pk': lecture_id,
+                'task_statement_pk': task_statement_id,
+                'task_pk': task_id,
+            }
         )
+        resp, resp_data = self.post(url, data, jwt)
 
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp_data['mark_value'], data['mark_value'])
@@ -24,11 +30,17 @@ class MarkEndPointTestCase(BaseTestCase):
         data = {
             'mark_value': 20,
         }
-        resp, resp_data = self.post(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/{task_id}/mark/',
-            data,
-            jwt
+        url = reverse(
+            'mark-list',
+            kwargs={
+                'course_pk': course_id,
+                'lecture_pk': lecture_id,
+                'task_statement_pk': task_statement_id,
+                'task_pk': task_id,
+            }
         )
+
+        resp, resp_data = self.post(url, data, jwt)
         self.assertEqual(resp.status_code, 400)
         self.assertTrue('ensure' in resp_data['mark_value'][0].lower())
 
@@ -38,18 +50,29 @@ class MarkEndPointTestCase(BaseTestCase):
         data = {
             'mark_value': 9,
         }
-        resp, resp_data = self.post(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/{task_id}/mark/',
-            data,
-            jwt
+        url = reverse(
+            'mark-list',
+            kwargs={
+                'course_pk': course_id,
+                'lecture_pk': lecture_id,
+                'task_statement_pk': task_statement_id,
+                'task_pk': task_id,
+            }
         )
+        resp, resp_data = self.post(url, data, jwt)
 
         jwt = self.auth('new_student_2')
-        resp, resp_data = self.get(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/{task_id}/mark/{resp_data["id"]}/',
-            data,
-            jwt
+        url = reverse(
+            'mark-detail',
+            kwargs={
+                'course_pk': course_id,
+                'lecture_pk': lecture_id,
+                'task_statement_pk': task_statement_id,
+                'task_pk': task_id,
+                'pk': resp_data["id"],
+            }
         )
+        resp, resp_data = self.get(url, data, jwt)
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp_data['mark_value'], data['mark_value'])

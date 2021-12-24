@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 
 class BaseTestCase(TestCase):
@@ -63,7 +64,7 @@ class BaseTestCase(TestCase):
             'starts_at': '2021-12-27',
             'ends_at': '2022-02-13',
         }
-        resp, resp_data = self.post('/api/v1/course/', data, jwt)
+        resp, resp_data = self.post(reverse('course-list'), data, jwt)
         return resp_data['id']
 
     def create_lecture(self):
@@ -73,7 +74,7 @@ class BaseTestCase(TestCase):
             'title': 'this is test title lecture',
             'text': 'texllllllllllll',
         }
-        resp, resp_data = self.post(f'/api/v1/course/{course_id}/lecture/', data, jwt)
+        resp, resp_data = self.post(reverse('lecture-list', kwargs={'course_pk': course_id}), data, jwt)
         return course_id, resp_data['id']
 
     def create_task_statement(self):
@@ -83,7 +84,12 @@ class BaseTestCase(TestCase):
             'title': 'task statement1',
             'text': 'you should do it fast!',
         }
-        resp, resp_data = self.post(f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/', data, jwt)
+
+        resp, resp_data = self.post(
+            reverse('task_statement-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id}),
+            data,
+            jwt
+        )
         return course_id, lecture_id, resp_data['id']
 
     def create_task(self):
@@ -96,16 +102,15 @@ class BaseTestCase(TestCase):
             'link': 'https://github.com/yuramorozov01/courses_system',
         }
         resp, resp_data = self.post(
-            f'/api/v1/course/{course_id}/lecture/{lecture_id}/task_statement/{task_statement_id}/task/',
+            reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id}),
             data,
             jwt
         )
         return course_id, lecture_id, task_statement_id, resp_data['id']
 
-
     def add_student_to_course(self, course_id, student_username):
         jwt = self.auth('qqq')
-        resp, resp_data = self.get(f'/api/v1/course/{course_id}/', {}, jwt)
+        resp, resp_data = self.get(reverse('course-detail', args=[course_id]), {}, jwt)
         students = [student['id'] for student in resp_data['students']]
         students.append(self.users[student_username]['id'])
         teachers = [teacher['id'] for teacher in resp_data['teachers']]
@@ -113,4 +118,4 @@ class BaseTestCase(TestCase):
             'students': students,
             'teachers': teachers,
         }
-        resp, resp_data = self.patch(f'/api/v1/course/{course_id}/', data, jwt)
+        resp, resp_data = self.patch(reverse('course-detail', args=[course_id]), data, jwt)

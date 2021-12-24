@@ -7,6 +7,7 @@ from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from course_app.permissions import IsCourseAuthor, IsCourseTeacher, IsCourseTeacherOrStudent
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -61,6 +62,19 @@ class CourseViewSet(viewsets.ModelViewSet):
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class
+
+    def get_permissions(self):
+        base_permissions = [permissions.IsAuthenticated]
+        permissions_dict = {
+            'create': [],
+            'destroy': [IsCourseAuthor],
+            'retrieve': [],
+            'list': [],
+            'update': [IsCourseAuthor],
+            'partial_update': [IsCourseTeacher],
+        }
+        base_permissions += permissions_dict.get(self.action, [])
+        return [permission() for permission in base_permissions]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, teachers=(self.request.user.id,))

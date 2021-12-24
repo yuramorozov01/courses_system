@@ -6,7 +6,7 @@ from lecture_app.serializers import (LectureCreateSerializer,
                                      LectureShortDetailsSerializer,
                                      LectureUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets
-from base_app.permissions import IsCourseTeacher
+from course_app.permissions import IsCourseAuthor, IsCourseTeacher, IsCourseTeacherOrStudent
 
 
 class LectureViewSet(viewsets.ModelViewSet):
@@ -33,8 +33,6 @@ class LectureViewSet(viewsets.ModelViewSet):
         Only a teacher of course can update lecture.
     '''
 
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_queryset(self):
         querysets_dict = {
             'create': Lecture.objects.filter(course__teachers=self.request.user.id),
@@ -60,7 +58,20 @@ class LectureViewSet(viewsets.ModelViewSet):
             'partial_update': LectureUpdateSerializer,
         }
         serializer_class = serializers_dict.get(self.action)
-        return serializer_classs
+        return serializer_class
+
+    def get_permissions(self):
+        base_permissions = [permissions.IsAuthenticated]
+        permissions_dict = {
+            'create': [IsCourseTeacher],
+            'destroy': [IsCourseAuthor],
+            'retrieve': [IsCourseTeacherOrStudent],
+            'list': [IsCourseTeacherOrStudent],
+            'update': [IsCourseAuthor],
+            'partial_update': [IsCourseTeacher],
+        }
+        base_permissions += permissions_dict.get(self.action, [])
+        return [permission() for permission in base_permissions]
 
     def perform_create(self, serializer):
         try:

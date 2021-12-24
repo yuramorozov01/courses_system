@@ -47,12 +47,12 @@ class MessageViewSet(viewsets.ModelViewSet):
             'list': Message.objects.filter(
                 Q(mark__task__task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(mark__task__author=self.request.user.id)
-            ).filter(mark=self.kwargs.get('mark_pk')),
+            ),
             'update': Message.objects.filter(author=self.request.user.id),
             'partial_update': Message.objects.filter(author=self.request.user.id),
         }
         queryset = querysets_dict.get(self.action)
-        return queryset
+        return queryset.filter(mark=self.kwargs.get('mark_pk')).distinct()
 
     def get_serializer_class(self):
         serializers_dict = {

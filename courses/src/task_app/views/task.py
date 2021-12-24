@@ -45,12 +45,12 @@ class TaskViewSet(viewsets.ModelViewSet):
             'list': Task.objects.filter(
                 Q(task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(author=self.request.user.id)
-            ).filter(task_statement=self.kwargs.get('task_statement_pk')),
+            ),
             'update': Task.objects.filter(author=self.request.user.id),
             'partial_update': Task.objects.filter(author=self.request.user.id),
         }
         queryset = querysets_dict.get(self.action)
-        return queryset
+        return queryset.filter(task_statement=self.kwargs.get('task_statement_pk')).distinct()
 
     def get_serializer_class(self):
         serializers_dict = {

@@ -42,12 +42,12 @@ class LectureFileViewSet(viewsets.ModelViewSet):
             ),
             'list': LectureFile.objects.filter(
                 Q(lecture__course__teachers=self.request.user.id) | Q(lecture__course__students=self.request.user.id)
-            ).filter(lecture=self.kwargs.get('lecture_pk')),
+            ),
             'update': LectureFile.objects.filter(lecture__course__teachers=self.request.user.id),
             'partial_update': LectureFile.objects.filter(lecture__course__teachers=self.request.user.id),
         }
         queryset = querysets_dict.get(self.action)
-        return queryset
+        return queryset.filter(lecture=self.kwargs.get('lecture_pk')).distinct()
 
     def get_serializer_class(self):
         serializers_dict = {

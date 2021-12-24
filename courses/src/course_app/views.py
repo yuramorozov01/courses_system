@@ -47,7 +47,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             'studying': Course.objects.filter(students=self.request.user.id),
         }
         queryset = querysets_dict.get(self.action)
-        return queryset
+        return queryset.distinct()
 
     def get_serializer_class(self):
         serializers_dict = {

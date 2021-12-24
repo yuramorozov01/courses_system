@@ -43,14 +43,14 @@ class TaskStatementFileViewSet(viewsets.ModelViewSet):
             'list': TaskStatementFile.objects.filter(
                 Q(task_statement__lecture__course__teachers=self.request.user.id) |
                 Q(task_statement__lecture__course__students=self.request.user.id)
-            ).filter(task_statement=self.kwargs.get('task_statement_pk')),
+            ),
             'update': TaskStatementFile.objects.filter(task_statement__lecture__course__teachers=self.request.user.id),
             'partial_update': TaskStatementFile.objects.filter(
                 task_statement__lecture__course__teachers=self.request.user.id
             ),
         }
         queryset = querysets_dict.get(self.action)
-        return queryset
+        return queryset.filter(task_statement=self.kwargs.get('task_statement_pk')).distinct()
 
     def get_serializer_class(self):
         serializers_dict = {

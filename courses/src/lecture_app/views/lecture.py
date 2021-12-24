@@ -6,6 +6,7 @@ from lecture_app.serializers import (LectureCreateSerializer,
                                      LectureShortDetailsSerializer,
                                      LectureUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets
+from base_app.permissions import IsCourseTeacher
 
 
 class LectureViewSet(viewsets.ModelViewSet):
@@ -43,12 +44,12 @@ class LectureViewSet(viewsets.ModelViewSet):
             ),
             'list': Lecture.objects.filter(
                 Q(course__teachers=self.request.user.id) | Q(course__students=self.request.user.id)
-            ).filter(course=self.kwargs.get('course_pk')),
+            ),
             'update': Lecture.objects.filter(course__teachers=self.request.user.id),
             'partial_update': Lecture.objects.filter(course__teachers=self.request.user.id),
         }
         queryset = querysets_dict.get(self.action)
-        return queryset
+        return queryset.filter(course=self.kwargs.get('course_pk')).distinct()
 
     def get_serializer_class(self):
         serializers_dict = {
@@ -59,7 +60,7 @@ class LectureViewSet(viewsets.ModelViewSet):
             'partial_update': LectureUpdateSerializer,
         }
         serializer_class = serializers_dict.get(self.action)
-        return serializer_class
+        return serializer_classs
 
     def perform_create(self, serializer):
         try:

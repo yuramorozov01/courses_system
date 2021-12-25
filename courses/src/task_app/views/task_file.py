@@ -30,8 +30,6 @@ class TaskFileViewSet(viewsets.ModelViewSet):
         Only an author of task file can update task file.
     '''
 
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_queryset(self):
         querysets_dict = {
             'create': TaskFile.objects.filter(author=self.request.user.id),

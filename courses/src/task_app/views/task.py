@@ -34,8 +34,6 @@ class TaskViewSet(viewsets.ModelViewSet):
         Only an author of task can update the task.
     '''
 
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_queryset(self):
         querysets_dict = {
             'create': Task.objects.filter(task_statement__lecture__course__students=self.request.user.id),

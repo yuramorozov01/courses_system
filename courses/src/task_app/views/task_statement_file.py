@@ -31,8 +31,6 @@ class TaskStatementFileViewSet(viewsets.ModelViewSet):
         Only a teacher of course can update task statement file.
     '''
 
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_queryset(self):
         querysets_dict = {
             'create': TaskStatementFile.objects.filter(task_statement__lecture__course__teachers=self.request.user.id),

@@ -5,6 +5,8 @@ from mark_app.serializers import (MessageCreateSerializer,
                                   MessageShortDetailsSerializer,
                                   MessageUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets
+from task_app.permissions import IsTaskAuthor, IsTaskAuthorOrCourseTeacher
+from mark_app.permissions import IsMessageAuthor
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -30,8 +32,6 @@ class MessageViewSet(viewsets.ModelViewSet):
         Update a message.
         Only an author of message can update message.
     '''
-
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         querysets_dict = {
@@ -64,6 +64,19 @@ class MessageViewSet(viewsets.ModelViewSet):
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class
+
+    def get_permissions(self):
+        base_permissions = [permissions.IsAuthenticated]
+        permissions_dict = {
+            'create': [IsTaskAuthorOrCourseTeacher],
+            'destroy': [IsMessageAuthor],
+            'retrieve': [IsTaskAuthorOrCourseTeacher],
+            'list': [IsTaskAuthorOrCourseTeacher],
+            'update': [IsMessageAuthor],
+            'partial_update': [IsMessageAuthor],
+        }
+        base_permissions += permissions_dict.get(self.action, [])
+        return [permission() for permission in base_permissions]
 
     def perform_create(self, serializer):
         try:

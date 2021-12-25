@@ -33,8 +33,6 @@ class TaskStatementViewSet(viewsets.ModelViewSet):
         Only a teacher of course can update task statement.
     '''
 
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_queryset(self):
         querysets_dict = {
             'create': TaskStatement.objects.filter(lecture__course__teachers=self.request.user.id),

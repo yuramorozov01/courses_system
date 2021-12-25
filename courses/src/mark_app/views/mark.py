@@ -5,6 +5,8 @@ from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task
+from course_app.permissions import IsCourseTeacher, IsCourseStudent, IsCourseTeacherOrStudent
+from task_app.permissions import IsTaskAuthor, IsTaskAuthorOrCourseTeacher
 
 
 class MarkViewSet(viewsets.ModelViewSet):
@@ -30,8 +32,6 @@ class MarkViewSet(viewsets.ModelViewSet):
         Update a mark.
         Only a teacher of course can update mark.
     '''
-
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         querysets_dict = {
@@ -61,6 +61,19 @@ class MarkViewSet(viewsets.ModelViewSet):
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class
+
+    def get_permissions(self):
+        base_permissions = [permissions.IsAuthenticated]
+        permissions_dict = {
+            'create': [IsCourseTeacher],
+            'destroy': [IsCourseTeacher],
+            'retrieve': [IsTaskAuthorOrCourseTeacher],
+            'list': [IsTaskAuthorOrCourseTeacher],
+            'update': [IsCourseTeacher],
+            'partial_update': [IsCourseTeacher],
+        }
+        base_permissions += permissions_dict.get(self.action, [])
+        return [permission() for permission in base_permissions]
 
     def perform_create(self, serializer):
         try:

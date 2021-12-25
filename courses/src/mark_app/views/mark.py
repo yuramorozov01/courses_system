@@ -1,5 +1,4 @@
-from course_app.permissions import (IsCourseStudent, IsCourseTeacher,
-                                    IsCourseTeacherOrStudent)
+from course_app.permissions import (IsCourseTeacher)
 from django.db.models import Q
 from mark_app.models import Mark
 from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
@@ -7,7 +6,7 @@ from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task
-from task_app.permissions import IsTaskAuthor, IsTaskAuthorOrCourseTeacher
+from task_app.permissions import IsTaskAuthorOrCourseTeacher
 
 
 class MarkViewSet(viewsets.ModelViewSet):

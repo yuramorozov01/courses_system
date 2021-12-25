@@ -1,4 +1,4 @@
-from course_app.permissions import (IsCourseAuthor, IsCourseTeacher,
+from course_app.permissions import (IsCourseTeacher,
                                     IsCourseTeacherOrStudent)
 from django.db.models import Q
 from lecture_app.models import Lecture

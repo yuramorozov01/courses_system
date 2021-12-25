@@ -1,6 +1,5 @@
 from base_app.serializers import CustomUserSerializer
 from course_app.models import Course
-from django.contrib.auth import get_user_model
 from lecture_app.serializers import LectureShortDetailsSerializer
 from rest_framework import serializers
 

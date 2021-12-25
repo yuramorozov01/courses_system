@@ -1,5 +1,4 @@
 from base_app.permissions import CustomBasePermission
-from rest_framework import permissions
 
 
 class IsCourseAuthor(CustomBasePermission):

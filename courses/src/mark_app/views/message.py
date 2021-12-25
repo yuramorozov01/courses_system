@@ -6,7 +6,7 @@ from mark_app.serializers import (MessageCreateSerializer,
                                   MessageShortDetailsSerializer,
                                   MessageUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets
-from task_app.permissions import IsTaskAuthor, IsTaskAuthorOrCourseTeacher
+from task_app.permissions import IsTaskAuthorOrCourseTeacher
 
 
 class MessageViewSet(viewsets.ModelViewSet):

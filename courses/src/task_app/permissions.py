@@ -22,4 +22,3 @@ class IsTaskAuthorOrCourseTeacher(CustomBasePermission):
     def has_permission(self, request, view):
         return self.has_permission_by_field(request, view, 'own_tasks', 'task_pk') or \
                self.has_permission_by_field(request, view, 'teaching_courses', 'course_pk')
-

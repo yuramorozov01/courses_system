@@ -21,7 +21,10 @@ class TaskEndPointTestCase(BaseTestCase):
     def test_get_task_statement_as_not_studying(self):
         course_id, lecture_id, task_statement_id = self.create_task_statement()
         jwt = self.auth('new_student_2')
-        url = reverse('task_statement-detail', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'pk': task_statement_id})
+        url = reverse(
+            'task_statement-detail',
+            kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'pk': task_statement_id}
+        )
         resp, resp_data = self.get(url, {}, jwt)
 
         self.assertEqual(resp.status_code, 404)
@@ -46,7 +49,10 @@ class TaskEndPointTestCase(BaseTestCase):
             'text': 'ooooooo moya oborona',
             'link': 'https://github.com/yuramorozov01/courses_system',
         }
-        url = reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id})
+        url = reverse(
+            'task-list',
+            kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id}
+        )
         resp, resp_data = self.post(url, data, jwt)
 
         self.assertEqual(resp_data['text'], data['text'])
@@ -62,11 +68,17 @@ class TaskEndPointTestCase(BaseTestCase):
             'text': 'ooooooo moya oborona',
             'link': 'https://github.com/yuramorozov01/courses_system',
         }
-        url = reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id})
+        url = reverse(
+            'task-list',
+            kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id}
+        )
         resp, resp_data = self.post(url, data, jwt)
 
         jwt = self.auth('qqq')
-        url = reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id})
+        url = reverse(
+            'task-list',
+            kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id}
+        )
         resp, resp_data = self.get(url, {}, jwt)
 
         self.assertEqual(len(resp_data), 1)

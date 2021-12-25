@@ -27,7 +27,7 @@ class TaskEndPointTestCase(BaseTestCase):
         )
         resp, resp_data = self.get(url, {}, jwt)
 
-        self.assertEqual(resp.status_code, 404)
+        self.assertEqual(resp.status_code, 403)
 
     def test_get_task_statements_as_studying(self):
         course_id, lecture_id, task_statement_id = self.create_task_statement()

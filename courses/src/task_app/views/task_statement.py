@@ -6,6 +6,7 @@ from task_app.serializers import (TaskStatementCreateSerializer,
                                   TaskStatementDetailsSerializer,
                                   TaskStatementShortDetailsSerializer,
                                   TaskStatementUpdateSerializer)
+from course_app.permissions import IsCourseAuthor, IsCourseTeacher, IsCourseTeacherOrStudent
 
 
 class TaskStatementViewSet(viewsets.ModelViewSet):
@@ -60,6 +61,19 @@ class TaskStatementViewSet(viewsets.ModelViewSet):
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class
+
+    def get_permissions(self):
+        base_permissions = [permissions.IsAuthenticated]
+        permissions_dict = {
+            'create': [IsCourseTeacher],
+            'destroy': [IsCourseTeacher],
+            'retrieve': [IsCourseTeacherOrStudent],
+            'list': [IsCourseTeacherOrStudent],
+            'update': [IsCourseTeacher],
+            'partial_update': [IsCourseTeacher],
+        }
+        base_permissions += permissions_dict.get(self.action, [])
+        return [permission() for permission in base_permissions]
 
     def perform_create(self, serializer):
         try:

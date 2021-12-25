@@ -4,7 +4,7 @@ from task_app.models import Task, TaskFile
 from task_app.serializers import (TaskFileCreateSerializer,
                                   TaskFileDetailsSerializer,
                                   TaskFileUpdateSerializer)
-
+from task_app.permissions import IsTaskAuthor, IsTaskAuthorOrCourseTeacher
 
 class TaskFileViewSet(viewsets.ModelViewSet):
     '''
@@ -60,6 +60,19 @@ class TaskFileViewSet(viewsets.ModelViewSet):
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class
+
+    def get_permissions(self):
+        base_permissions = [permissions.IsAuthenticated]
+        permissions_dict = {
+            'create': [IsTaskAuthor],
+            'destroy': [IsTaskAuthor],
+            'retrieve': [IsTaskAuthorOrCourseTeacher],
+            'list': [IsTaskAuthorOrCourseTeacher],
+            'update': [IsTaskAuthor],
+            'partial_update': [IsTaskAuthor],
+        }
+        base_permissions += permissions_dict.get(self.action, [])
+        return [permission() for permission in base_permissions]
 
     def perform_create(self, serializer):
         try:

@@ -26,7 +26,7 @@ class LectureEndPointTestCase(BaseTestCase):
             {},
             jwt
         )
-        self.assertEqual(resp.status_code, 404)
+        self.assertEqual(resp.status_code, 403)
 
         jwt = self.auth('qqq')
         resp, resp_data = self.get(

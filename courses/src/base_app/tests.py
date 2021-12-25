@@ -33,7 +33,10 @@ class BaseTestCase(TestCase):
             user_inst.save()
 
     def auth(self, username):
-        login_resp = self.client.post('/auth/jwt/create/', {'username': username, 'password': self.users[username]['password']})
+        login_resp = self.client.post(
+            '/auth/jwt/create/',
+            {'username': username, 'password': self.users[username]['password']}
+        )
         jwt = login_resp.json()['access']
         return jwt
 
@@ -101,8 +104,12 @@ class BaseTestCase(TestCase):
             'text': 'ooooooo moya oborona',
             'link': 'https://github.com/yuramorozov01/courses_system',
         }
+        url = reverse(
+            'task-list',
+            kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id}
+        )
         resp, resp_data = self.post(
-            reverse('task-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id, 'task_statement_pk': task_statement_id}),
+            url,
             data,
             jwt
         )

@@ -1,4 +1,5 @@
 from course_app.models import Course
+from course_app.permissions import (IsCourseAuthor, IsCourseTeacher)
 from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
                                     CourseCreateSerializer,
                                     CourseDetailsSerializer,
@@ -47,7 +48,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             'studying': Course.objects.filter(students=self.request.user.id),
         }
         queryset = querysets_dict.get(self.action)
-        return queryset
+        return queryset.distinct()
 
     def get_serializer_class(self):
         serializers_dict = {
@@ -61,6 +62,19 @@ class CourseViewSet(viewsets.ModelViewSet):
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class
+
+    def get_permissions(self):
+        base_permissions = [permissions.IsAuthenticated]
+        permissions_dict = {
+            'create': [],
+            'destroy': [IsCourseAuthor],
+            'retrieve': [],
+            'list': [],
+            'update': [IsCourseAuthor],
+            'partial_update': [IsCourseTeacher],
+        }
+        base_permissions += permissions_dict.get(self.action, [])
+        return [permission() for permission in base_permissions]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, teachers=(self.request.user.id,))

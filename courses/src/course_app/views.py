@@ -1,4 +1,6 @@
 from course_app.models import Course
+from course_app.permissions import (IsCourseAuthor, IsCourseTeacher,
+                                    IsCourseTeacherOrStudent)
 from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
                                     CourseCreateSerializer,
                                     CourseDetailsSerializer,
@@ -7,7 +9,6 @@ from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from course_app.permissions import IsCourseAuthor, IsCourseTeacher, IsCourseTeacherOrStudent
 
 
 class CourseViewSet(viewsets.ModelViewSet):

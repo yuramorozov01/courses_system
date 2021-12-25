@@ -1,3 +1,5 @@
+from course_app.permissions import (IsCourseStudent, IsCourseTeacher,
+                                    IsCourseTeacherOrStudent)
 from django.db.models import Q
 from mark_app.models import Mark
 from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
@@ -5,7 +7,6 @@ from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkUpdateSerializer)
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task
-from course_app.permissions import IsCourseTeacher, IsCourseStudent, IsCourseTeacherOrStudent
 from task_app.permissions import IsTaskAuthor, IsTaskAuthorOrCourseTeacher
 
 

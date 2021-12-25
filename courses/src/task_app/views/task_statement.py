@@ -1,3 +1,5 @@
+from course_app.permissions import (IsCourseAuthor, IsCourseTeacher,
+                                    IsCourseTeacherOrStudent)
 from django.db.models import Q
 from lecture_app.models import Lecture
 from rest_framework import permissions, serializers, viewsets
@@ -6,7 +8,6 @@ from task_app.serializers import (TaskStatementCreateSerializer,
                                   TaskStatementDetailsSerializer,
                                   TaskStatementShortDetailsSerializer,
                                   TaskStatementUpdateSerializer)
-from course_app.permissions import IsCourseAuthor, IsCourseTeacher, IsCourseTeacherOrStudent
 
 
 class TaskStatementViewSet(viewsets.ModelViewSet):

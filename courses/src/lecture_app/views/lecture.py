@@ -64,10 +64,10 @@ class LectureViewSet(viewsets.ModelViewSet):
         base_permissions = [permissions.IsAuthenticated]
         permissions_dict = {
             'create': [IsCourseTeacher],
-            'destroy': [IsCourseAuthor],
+            'destroy': [IsCourseTeacher],
             'retrieve': [IsCourseTeacherOrStudent],
             'list': [IsCourseTeacherOrStudent],
-            'update': [IsCourseAuthor],
+            'update': [IsCourseTeacher],
             'partial_update': [IsCourseTeacher],
         }
         base_permissions += permissions_dict.get(self.action, [])

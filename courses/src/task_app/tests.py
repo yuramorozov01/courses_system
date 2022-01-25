@@ -14,9 +14,9 @@ class TaskEndPointTestCase(BaseTestCase):
         print(url)
         resp, resp_data = self.post(url, data, jwt)
 
-        self.assertEqual(resp.status_code, 201)
-        self.assertEqual(data['text'], resp_data['text'])
-        self.assertEqual(self.users['qqq']['id'], resp_data['author']['id'])
+        assert resp.status_code == 201
+        assert data['text'] == resp_data['text']
+        assert self.users['qqq']['id'] == resp_data['author']['id']
 
     def test_get_task_statement_as_not_studying(self):
         course_id, lecture_id, task_statement_id = self.create_task_statement()
@@ -27,7 +27,7 @@ class TaskEndPointTestCase(BaseTestCase):
         )
         resp, resp_data = self.get(url, {}, jwt)
 
-        self.assertEqual(resp.status_code, 403)
+        assert resp.status_code == 403
 
     def test_get_task_statements_as_studying(self):
         course_id, lecture_id, task_statement_id = self.create_task_statement()
@@ -37,8 +37,8 @@ class TaskEndPointTestCase(BaseTestCase):
         url = reverse('task_statement-list', kwargs={'course_pk': course_id, 'lecture_pk': lecture_id})
         resp, resp_data = self.get(url, {}, jwt)
 
-        self.assertEqual(len(resp_data), 1)
-        self.assertEqual(resp.status_code, 200)
+        assert len(resp_data) == 1
+        assert resp.status_code == 200
 
     def test_send_task_to_task_statement(self):
         course_id, lecture_id, task_statement_id = self.create_task_statement()
@@ -55,9 +55,9 @@ class TaskEndPointTestCase(BaseTestCase):
         )
         resp, resp_data = self.post(url, data, jwt)
 
-        self.assertEqual(resp_data['text'], data['text'])
-        self.assertEqual(resp_data['author']['id'], self.users['new_student_2']['id'])
-        self.assertEqual(resp.status_code, 201)
+        assert resp_data['text'] == data['text']
+        assert resp_data['author']['id'] == self.users['new_student_2']['id']
+        assert resp.status_code == 201
 
     def test_get_task_from_task_statement_as_teacher(self):
         course_id, lecture_id, task_statement_id = self.create_task_statement()
@@ -81,5 +81,5 @@ class TaskEndPointTestCase(BaseTestCase):
         )
         resp, resp_data = self.get(url, {}, jwt)
 
-        self.assertEqual(len(resp_data), 1)
-        self.assertEqual(resp.status_code, 200)
+        assert len(resp_data) == 1
+        assert resp.status_code == 200

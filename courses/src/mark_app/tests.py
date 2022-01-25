@@ -20,9 +20,9 @@ class MarkEndPointTestCase(BaseTestCase):
         )
         resp, resp_data = self.post(url, data, jwt)
 
-        self.assertEqual(resp.status_code, 201)
-        self.assertEqual(resp_data['mark_value'], data['mark_value'])
-        self.assertEqual(self.users['qqq']['id'], resp_data['author']['id'])
+        assert resp.status_code == 201
+        assert resp_data['mark_value'] == data['mark_value']
+        assert self.users['qqq']['id'] == resp_data['author']['id']
 
     def test_add_mark_to_task_more_than_10(self):
         course_id, lecture_id, task_statement_id, task_id = self.create_task()
@@ -41,8 +41,8 @@ class MarkEndPointTestCase(BaseTestCase):
         )
 
         resp, resp_data = self.post(url, data, jwt)
-        self.assertEqual(resp.status_code, 400)
-        self.assertTrue('ensure' in resp_data['mark_value'][0].lower())
+        assert resp.status_code == 400
+        assert 'ensure' in resp_data['mark_value'][0].lower()
 
     def test_get_mark_as_student(self):
         course_id, lecture_id, task_statement_id, task_id = self.create_task()
@@ -74,6 +74,6 @@ class MarkEndPointTestCase(BaseTestCase):
         )
         resp, resp_data = self.get(url, data, jwt)
 
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp_data['mark_value'], data['mark_value'])
-        self.assertEqual(self.users['qqq']['id'], resp_data['author']['id'])
+        assert resp.status_code == 200
+        assert resp_data['mark_value'] == data['mark_value']
+        assert self.users['qqq']['id'] == resp_data['author']['id']

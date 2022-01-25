@@ -64,8 +64,8 @@ class BaseTestCase(TestCase):
         jwt = self.auth('qqq')
         data = {
             'title': 'this is test title',
-            'starts_at': '2021-12-27',
-            'ends_at': '2022-02-13',
+            'starts_at': '2022-02-27',
+            'ends_at': '2022-12-13',
         }
         resp, resp_data = self.post(reverse('course-list'), data, jwt)
         return resp_data['id']

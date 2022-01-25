@@ -1,5 +1,6 @@
 from base_app.tests import BaseTestCase
 from django.urls import reverse
+import pytest
 
 
 class CourseEndPointTestCase(BaseTestCase):
@@ -7,42 +8,41 @@ class CourseEndPointTestCase(BaseTestCase):
         jwt = self.auth('qqq')
         data = {
             'title': 'this is test title',
-            'starts_at': '2021-11-27',
-            'ends_at': '2022-02-13',
+            'starts_at': '2012-02-27',
+            'ends_at': '2022-12-13',
         }
         resp, resp_data = self.post(reverse('course-list'), data, jwt)
-
-        self.assertEqual(resp.status_code, 400)
-        self.assertTrue('starts_at' in resp_data)
+        assert resp.status_code == 400
+        assert 'starts_at' in resp_data
 
     def test_create_course(self):
         jwt = self.auth('qqq')
         data = {
             'title': 'this is test title',
-            'starts_at': '2021-12-27',
-            'ends_at': '2022-02-13',
+            'starts_at': '2022-02-27',
+            'ends_at': '2022-12-13',
         }
         resp, resp_data = self.post(reverse('course-list'), data, jwt)
 
-        self.assertEqual(resp.status_code, 201)
-        self.assertEqual(data['title'], resp_data['title'])
-        self.assertEqual(resp_data['teachers'][0]['id'], resp_data['author']['id'])
+        assert resp.status_code == 201
+        assert data['title'] == resp_data['title']
+        assert resp_data['teachers'][0]['id'] == resp_data['author']['id']
 
     def test_update_course(self):
         jwt = self.auth('qqq')
         data = {
             'title': 'this is test title',
-            'starts_at': '2021-12-27',
-            'ends_at': '2022-02-13',
+            'starts_at': '2022-02-27',
+            'ends_at': '2022-12-13',
         }
         resp, resp_data = self.post(reverse('course-list'), data, jwt)
 
-        self.assertEqual(resp.status_code, 201)
+        assert resp.status_code == 201
 
         data = {
             'title': 'this is test title',
-            'starts_at': '2021-12-27',
-            'ends_at': '2022-02-13',
+            'starts_at': '2022-02-27',
+            'ends_at': '2022-12-13',
             'status': 'Open',
             'students': [self.users['new_student_1']['id']],
             'teachers': [self.users['qqq']['id'], self.users['new_teacher_1']['id']],
@@ -50,14 +50,14 @@ class CourseEndPointTestCase(BaseTestCase):
 
         resp, resp_data = self.put(reverse('course-detail', args=[resp_data["id"]]), data, jwt)
 
-        self.assertEqual(resp.status_code, 200)
+        assert resp.status_code == 200
 
     def test_add_student_to_course(self):
         jwt = self.auth('qqq')
         data = {
             'title': 'this is test title',
-            'starts_at': '2021-12-27',
-            'ends_at': '2022-02-13',
+            'starts_at': '2022-02-27',
+            'ends_at': '2022-12-13',
         }
         resp, resp_data = self.post(reverse('course-list'), data, jwt)
 
@@ -65,5 +65,6 @@ class CourseEndPointTestCase(BaseTestCase):
 
         jwt = self.auth('new_student_1')
         resp, resp_data = self.get(reverse('course-detail', args=[resp_data["id"]]), data, jwt)
-        self.assertEqual(resp_data['title'], data['title'])
-        self.assertEqual(len(resp_data['students']), 1)
+
+        assert resp_data['title'] == data['title']
+        assert len(resp_data['students']) == 1

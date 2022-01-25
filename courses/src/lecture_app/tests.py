@@ -12,9 +12,9 @@ class LectureEndPointTestCase(BaseTestCase):
         course_id = self.create_course()
         resp, resp_data = self.post(reverse('lecture-list', kwargs={'course_pk': course_id}), data, jwt)
 
-        self.assertEqual(resp.status_code, 201)
-        self.assertEqual(data['text'], resp_data['text'])
-        self.assertEqual(self.users['qqq']['id'], resp_data['author']['id'])
+        assert resp.status_code == 201
+        assert data['text'] == resp_data['text']
+        assert self.users['qqq']['id'] == resp_data['author']['id']
 
     def test_get_lecture_not_studying_course(self):
         course_id, lecture_id = self.create_lecture()
@@ -26,7 +26,7 @@ class LectureEndPointTestCase(BaseTestCase):
             {},
             jwt
         )
-        self.assertEqual(resp.status_code, 403)
+        assert resp.status_code == 403
 
         jwt = self.auth('qqq')
         resp, resp_data = self.get(
@@ -34,7 +34,7 @@ class LectureEndPointTestCase(BaseTestCase):
             {},
             jwt
         )
-        self.assertEqual(resp.status_code, 200)
+        assert resp.status_code == 200
 
     def test_get_lecture_teaching_course(self):
         course_id, lecture_id = self.create_lecture()
@@ -45,4 +45,4 @@ class LectureEndPointTestCase(BaseTestCase):
             {},
             jwt
         )
-        self.assertEqual(resp.status_code, 200)
+        assert resp.status_code == 200

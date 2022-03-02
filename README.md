@@ -67,7 +67,7 @@ This web-application provides API for a courses system.
 * Every user can create course (user automatically becomes a teacher of this course).
 
 
-* Every teacher has the next features: 
+* Every teacher has the next features:
   * Add/delete other users as a students/teachers.
   * Create/update/delete lectures with files.
   * Create/update/delete task statement with files for the lecture.

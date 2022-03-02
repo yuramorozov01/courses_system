@@ -12,9 +12,6 @@ __pycache__/
 
 data/
 
-migrations/
-!migrations/__init__.py
-
 uploads/
 
 .pytest_cache/

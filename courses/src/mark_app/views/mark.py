@@ -1,9 +1,10 @@
-from course_app.permissions import (IsCourseTeacher)
+from course_app.permissions import IsCourseTeacher
 from django.db.models import Q
 from mark_app.models import Mark
 from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkShortDetailsSerializer,
                                   MarkUpdateSerializer)
+from mark_app.tasks import send_new_mark_email
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task
 from task_app.permissions import IsTaskAuthorOrCourseTeacher
@@ -81,5 +82,11 @@ class MarkViewSet(viewsets.ModelViewSet):
                 .filter(task_statement__lecture__course__teachers=self.request.user.id)\
                 .get(pk=self.kwargs.get('task_pk'))
             serializer.save(author=self.request.user, task=task)
+
+            if hasattr(task.author, 'email'):
+                mark_author_username = self.request.user.username
+                task_statement_title = task.task_statement.title
+                mark_value = serializer.validated_data.get('mark_value')
+                send_new_mark_email.delay(task.author.email, mark_author_username, task_statement_title, mark_value)
         except Task.DoesNotExist:
             raise serializers.ValidationError('You can add marks only in teaching courses')

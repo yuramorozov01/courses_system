@@ -1,5 +1,4 @@
-from course_app.permissions import (IsCourseStudent,
-                                    IsCourseTeacherOrStudent)
+from course_app.permissions import IsCourseStudent, IsCourseTeacherOrStudent
 from django.db.models import Q
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task, TaskStatement

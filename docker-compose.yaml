@@ -1,6 +1,21 @@
 version: "2.2"
 
 services:
+  redis:
+    image: redis
+    restart: always
+    env_file: ./.env
+
+  worker:
+    restart: always
+    build:
+      context: ./courses
+    command: [ "celery", "--workdir=./src", "-A", "courses", "worker" ]
+    env_file: ./.env
+    depends_on:
+      db:
+        condition: service_healthy
+
   courses:
     restart: always
     build:

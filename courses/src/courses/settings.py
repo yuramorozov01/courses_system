@@ -170,3 +170,18 @@ SIMPLE_JWT = {
 
     'AUTH_HEADER_TYPES': ('JWT',),
 }
+
+
+# Celery configuration
+
+# Broker URL from where celery will take the tasks
+CELERY_BROKER_URL = 'redis://redis:6379'
+
+
+# Settings for django.core.mail
+
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = config('EMAIL_PORT')

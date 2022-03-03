@@ -1,5 +1,5 @@
 from course_app.models import Course
-from course_app.permissions import (IsCourseAuthor, IsCourseTeacher)
+from course_app.permissions import IsCourseAuthor, IsCourseTeacher
 from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
                                     CourseCreateSerializer,
                                     CourseDetailsSerializer,

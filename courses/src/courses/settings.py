@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_yasg',
+    'django_celery_beat',
 
     'base_app',
     'course_app',

@@ -34,7 +34,7 @@ services:
     ports:
       - '5432'
     volumes:
-      - ./courses/data:/var/lib/postgresql/data
+      - postgresqldbvolume:/var/lib/postgresql/data
     env_file: ./.env
     environment:
       - POSTGRES_DB=${DB_NAME}
@@ -45,3 +45,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+volumes:
+  postgresqldbvolume:
+    driver: local

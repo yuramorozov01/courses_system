@@ -1,5 +1,5 @@
 from celery import shared_task
-from decouple import config
+from django.conf import settings
 from django.core.mail import send_mail
 
 
@@ -12,7 +12,7 @@ def send_new_mark_email(email, mark_author_username, task_statement_title, mark_
             mark_author_username,
             mark_value
         ),
-        config('EMAIL_HOST_USER'),
+        settings.EMAIL_HOST_USER,
         [email],
         fail_silently=False,
     )

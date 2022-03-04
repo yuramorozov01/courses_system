@@ -90,7 +90,11 @@ class Task(models.Model):
         return f'{self.author} | {self.created_at}'
 
     def get_absolute_url(self):
-        return reverse('task-detail', kwargs={'course_pk': self.task_statement.lecture.course.id, 'lecture_pk': self.task_statement.lecture.id, 'task_statement_pk': self.task_statement.id, 'pk': self.id})
+        return reverse('task-detail', kwargs={
+            'course_pk': self.task_statement.lecture.course.id,
+            'lecture_pk': self.task_statement.lecture.id,
+            'task_statement_pk': self.task_statement.id, 'pk': self.id
+        })
 
 
 class TaskFile(models.Model):

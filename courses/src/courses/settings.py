@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'djoser',
     'drf_yasg',
     'django_celery_beat',
+    'django_celery_results',
 
     'base_app',
     'course_app',
@@ -177,6 +178,7 @@ SIMPLE_JWT = {
 
 # Broker URL from where celery will take the tasks
 CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'django-db'
 
 
 # Settings for django.core.mail

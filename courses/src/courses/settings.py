@@ -177,8 +177,8 @@ SIMPLE_JWT = {
 # Celery configuration
 
 # Broker URL from where celery will take the tasks
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
 
 
 # Settings for django.core.mail

@@ -10,6 +10,8 @@ services:
     restart: always
     build:
       context: ./courses
+    volumes:
+      - ./courses/src:/app/src
     command: ["celery", "--workdir=./src", "-A", "courses", "worker"]
     env_file: ./.env
     depends_on:
@@ -24,6 +26,8 @@ services:
     restart: always
     build:
       context: ./courses
+    volumes:
+      - ./courses/src:/app/src
     command: ["celery", "--workdir=./src", "-A", "courses", "beat", "-l", "INFO", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
     env_file: ./.env
     depends_on:
@@ -38,6 +42,8 @@ services:
       context: ./courses
     ports:
       - "8000:8000"
+    volumes:
+      - ./courses/src:/app/src
     command: ["./courses_run.bash"]
     env_file: ./.env
     depends_on:

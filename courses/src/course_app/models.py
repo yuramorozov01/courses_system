@@ -1,7 +1,8 @@
-from course_app.choices import StatusChoices
-from course_app.validators import validate_date
 from django.contrib.auth import get_user_model
 from django.db import models
+
+from course_app.choices import StatusChoices
+from course_app.validators import validate_date
 
 
 class Course(models.Model):

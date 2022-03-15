@@ -1,6 +1,7 @@
 from django.urls import include, path
-from mark_app import views as mark_views
 from rest_framework_nested.routers import NestedSimpleRouter
+
+from mark_app import views as mark_views
 from task_app.urls import task_router
 
 mark_router = NestedSimpleRouter(task_router, r'task', lookup='task')

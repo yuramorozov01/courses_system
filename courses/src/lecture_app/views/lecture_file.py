@@ -1,10 +1,11 @@
-from course_app.permissions import IsCourseTeacher, IsCourseTeacherOrStudent
 from django.db.models import Q
+from rest_framework import permissions, serializers, viewsets
+
+from course_app.permissions import IsCourseTeacher, IsCourseTeacherOrStudent
 from lecture_app.models import Lecture, LectureFile
 from lecture_app.serializers import (LectureFileCreateSerializer,
                                      LectureFileDetailsSerializer,
                                      LectureFileUpdateSerializer)
-from rest_framework import permissions, serializers, viewsets
 
 
 class LectureFileViewSet(viewsets.ModelViewSet):

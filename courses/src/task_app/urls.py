@@ -1,6 +1,7 @@
 from django.urls import include, path
-from lecture_app.urls import lecture_router
 from rest_framework_nested.routers import NestedSimpleRouter
+
+from lecture_app.urls import lecture_router
 from task_app import views as task_views
 
 task_statement_router = NestedSimpleRouter(lecture_router, r'lecture', lookup='lecture')

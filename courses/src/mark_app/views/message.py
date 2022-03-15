@@ -1,11 +1,12 @@
 from django.db.models import Q
+from rest_framework import permissions, serializers, viewsets
+
 from mark_app.models import Mark, Message
 from mark_app.permissions import IsMessageAuthor
 from mark_app.serializers import (MessageCreateSerializer,
                                   MessageDetailsSerializer,
                                   MessageShortDetailsSerializer,
                                   MessageUpdateSerializer)
-from rest_framework import permissions, serializers, viewsets
 from task_app.permissions import IsTaskAuthorOrCourseTeacher
 
 

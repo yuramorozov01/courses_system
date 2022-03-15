@@ -1,6 +1,7 @@
 from celery import shared_task
 from decouple import config
 from django.core.mail import send_mail
+
 from task_app.models import Task
 
 

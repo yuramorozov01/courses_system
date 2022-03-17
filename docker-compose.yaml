@@ -4,6 +4,8 @@ services:
   redis:
     image: redis
     restart: always
+    volumes:
+      - redisvolume:/data
     env_file: ./.env
 
   worker:
@@ -96,4 +98,6 @@ services:
 
 volumes:
   postgresqldbvolume:
+    driver: local
+  redisvolume:
     driver: local

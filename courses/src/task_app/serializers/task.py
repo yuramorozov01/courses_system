@@ -1,7 +1,6 @@
-from rest_framework import serializers
-
 from base_app.serializers import CustomUserSerializer
 from mark_app.serializers import MarkShortDetailsSerializer
+from rest_framework import serializers
 from task_app.models import Task
 from task_app.serializers.task_file import TaskFileDetailsSerializer
 

@@ -2,7 +2,6 @@ from celery import Task as CeleryTask
 from courses.celery import app
 from django.conf import settings
 from django.core.mail import send_mail
-
 from task_app.models import Task
 
 

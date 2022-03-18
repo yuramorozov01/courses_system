@@ -1,8 +1,7 @@
-from django.db.models import Q
-from rest_framework import permissions, serializers, viewsets
-
 from course_app.permissions import IsCourseTeacher, IsCourseTeacherOrStudent
+from django.db.models import Q
 from lecture_app.models import Lecture
+from rest_framework import permissions, serializers, viewsets
 from task_app.models import TaskStatement
 from task_app.serializers import (TaskStatementCreateSerializer,
                                   TaskStatementDetailsSerializer,

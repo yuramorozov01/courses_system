@@ -1,6 +1,5 @@
 from django.db.models import Q
 from rest_framework import permissions, serializers, viewsets
-
 from task_app.models import Task, TaskFile
 from task_app.permissions import IsTaskAuthor, IsTaskAuthorOrCourseTeacher
 from task_app.serializers import (TaskFileCreateSerializer,

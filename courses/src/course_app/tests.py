@@ -1,7 +1,6 @@
 import pytest
-from django.urls import reverse
-
 from base_app.tests import BaseTestCase
+from django.urls import reverse
 
 
 class CourseEndPointTestCase(BaseTestCase):

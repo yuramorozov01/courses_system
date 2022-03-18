@@ -13,11 +13,9 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from decouple import config
-
 import sentry_sdk
+from decouple import config
 from sentry_sdk.integrations.django import DjangoIntegration
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

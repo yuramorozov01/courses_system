@@ -1,8 +1,7 @@
-from rest_framework import serializers
-
 from base_app.serializers import CustomUserSerializer
 from course_app.models import Course
 from lecture_app.serializers import LectureShortDetailsSerializer
+from rest_framework import serializers
 
 
 class CourseCreateSerializer(serializers.ModelSerializer):

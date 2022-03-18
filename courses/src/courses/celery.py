@@ -22,8 +22,8 @@ app.conf.beat_schedule = {
     # Executes daily at midnight
     'daily-at-midnight-send-unreviewed-tasks': {
         'task': 'task_app.tasks.SendEmailWithUnreviewedTasksTask',
-        # 'schedule': crontab(minute=0, hour=0),
-        'schedule': crontab(minute='*/1'),
+        'schedule': crontab(minute=0, hour=0),
+        # 'schedule': crontab(minute='*/1'),
     },
 }
 

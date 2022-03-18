@@ -6,7 +6,7 @@ from mark_app.models import Mark
 from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkShortDetailsSerializer,
                                   MarkUpdateSerializer)
-from mark_app.tasks import send_new_mark_email
+from mark_app.tasks import SendNewMarkEmailTask
 from task_app.models import Task
 from task_app.permissions import IsTaskAuthorOrCourseTeacher
 
@@ -88,6 +88,6 @@ class MarkViewSet(viewsets.ModelViewSet):
                 mark_author_username = self.request.user.username
                 task_statement_title = task.task_statement.title
                 mark_value = serializer.validated_data.get('mark_value')
-                send_new_mark_email.delay(task.author.email, mark_author_username, task_statement_title, mark_value)
+                SendNewMarkEmailTask().delay(task.author.email, mark_author_username, task_statement_title, mark_value)
         except Task.DoesNotExist:
             raise serializers.ValidationError('You can add marks only in teaching courses')

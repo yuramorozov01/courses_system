@@ -21,8 +21,9 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     # Executes daily at midnight
     'daily-at-midnight-send-unreviewed-tasks': {
-        'task': 'tasks.send_email_with_unreviewed_tasks',
-        'schedule': crontab(minute=0, hour=0),
+        'task': 'task_app.tasks.SendEmailWithUnreviewedTasksTask',
+        # 'schedule': crontab(minute=0, hour=0),
+        'schedule': crontab(minute='*/1'),
     },
 }
 

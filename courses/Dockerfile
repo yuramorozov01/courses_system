@@ -24,3 +24,5 @@ RUN pip3 install -r requirements.txt
 COPY ./src ./src
 
 USER ${DOCKER_LOGIN}
+
+CMD ['./courses_run.bash']

@@ -87,6 +87,15 @@ class MarkViewSet(viewsets.ModelViewSet):
                 mark_author_username = self.request.user.username
                 task_statement_title = task.task_statement.title
                 mark_value = serializer.validated_data.get('mark_value')
-                SendNewMarkEmailTask().delay(task.author.email, mark_author_username, task_statement_title, mark_value)
+                SendNewMarkEmailTask().apply_async(
+                    args=[
+                        task.author.email,
+                        mark_author_username,
+                        task_statement_title,
+                        mark_value,
+                    ],
+                    queue='email',
+                    priority=9,
+                )
         except Task.DoesNotExist:
             raise serializers.ValidationError('You can add marks only in teaching courses')

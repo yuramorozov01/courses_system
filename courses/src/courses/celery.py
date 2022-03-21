@@ -22,9 +22,16 @@ app.conf.beat_schedule = {
     # Executes daily at midnight
     'daily-at-midnight-send-unreviewed-tasks': {
         'task': 'task_app.tasks.SendEmailWithUnreviewedTasksTask',
-        'schedule': crontab(minute=0, hour=0),
-        # 'schedule': crontab(minute='*/1'),
+        # 'schedule': crontab(minute=0, hour=0),
+        'schedule': crontab(minute='*/1'),
+        'options': {'queue': 'email', 'priority': 5},
     },
+    'calc-amount-of-students-every-5-min': {
+        'task': 'course_app.tasks.CalcAmountOfStudentsInCourseTask',
+        'schedule': crontab(minute='*/5'),
+        # 'schedule': crontab(minute='*/1'),
+        'options': {'queue': 'default'},
+    }
 }
 
 

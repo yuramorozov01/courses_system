@@ -8,14 +8,31 @@ services:
       - redisvolume:/data
     env_file: ./.env
 
-  worker:
+  worker_default:
     restart: always
     build:
       context: ./courses
     volumes:
       - ./courses/src:/app/src
     entrypoint: []
-    command: ["celery", "--workdir=./src", "-A", "courses", "worker"]
+    command: ["celery", "--workdir=./src", "-A", "courses", "worker", "-Q", "default"]
+    env_file: ./.env
+    depends_on:
+      redis:
+        condition: service_started
+      beat:
+        condition: service_started
+      db:
+        condition: service_healthy
+
+  worker_email:
+    restart: always
+    build:
+      context: ./courses
+    volumes:
+      - ./courses/src:/app/src
+    entrypoint: []
+    command: ["celery", "--workdir=./src", "-A", "courses", "worker", "-c", "1", "-Q", "email"]
     env_file: ./.env
     depends_on:
       redis:
@@ -56,7 +73,9 @@ services:
         condition: service_started
       beat:
         condition: service_started
-      worker:
+      worker_default:
+        condition: service_started
+      worker_email:
         condition: service_started
       db:
         condition: service_healthy
@@ -75,7 +94,9 @@ services:
         condition: service_started
       redis:
         condition: service_started
-      worker:
+      worker_default:
+        condition: service_started
+      worker_email:
         condition: service_started
 
   db:

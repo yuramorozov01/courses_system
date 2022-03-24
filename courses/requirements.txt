@@ -5,6 +5,8 @@ billiard==3.6.4.0
 celery==5.2.3
 certifi==2021.10.8
 cffi==1.15.0
+channels==3.0.4
+channels-redis==3.4.0
 charset-normalizer==2.0.9
 click==8.0.4
 click-didyoumean==0.3.0
@@ -14,6 +16,7 @@ coreapi==2.3.3
 coreschema==0.0.4
 coverage==6.2
 cryptography==36.0.1
+daphne==3.0.2
 defusedxml==0.7.1
 Deprecated==1.2.13
 Django==3.2.12

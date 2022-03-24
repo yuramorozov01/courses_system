@@ -13,7 +13,7 @@ services:
     build:
       context: ./courses
     volumes:
-      - ./courses/src:/app/src
+      - ./courses:/app
     entrypoint: []
     command: ["celery", "--workdir=./src", "-A", "courses", "worker", "-Q", "default"]
     env_file: ./.env
@@ -30,7 +30,7 @@ services:
     build:
       context: ./courses
     volumes:
-      - ./courses/src:/app/src
+      - ./courses:/app
     entrypoint: []
     command: ["celery", "--workdir=./src", "-A", "courses", "worker", "-c", "1", "-Q", "email"]
     env_file: ./.env
@@ -47,7 +47,7 @@ services:
     build:
       context: ./courses
     volumes:
-      - ./courses/src:/app/src
+      - ./courses:/app
     entrypoint: []
     command: ["celery", "--workdir=./src", "-A", "courses", "beat", "-l", "INFO", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
     env_file: ./.env
@@ -64,7 +64,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./courses/src:/app/src
+      - ./courses:/app
     entrypoint: []
     command: ["./courses_run.bash"]
     env_file: ./.env

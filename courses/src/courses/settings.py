@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
 
+    'channels',
+
     'base_app',
     'course_app',
     'lecture_app',
@@ -85,7 +87,21 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = "courses.asgi.application"
+
 WSGI_APPLICATION = 'courses.wsgi.application'
+
+
+# Channels configuration
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)],
+        },
+    },
+}
 
 
 # Database

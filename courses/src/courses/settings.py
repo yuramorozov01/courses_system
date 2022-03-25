@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'lecture_app',
     'task_app',
     'mark_app',
+
+    'ws_app',
 ]
 
 MIDDLEWARE = [

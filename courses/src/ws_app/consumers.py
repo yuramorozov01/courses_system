@@ -3,7 +3,7 @@ from channels.generic.websocket import WebsocketConsumer
 from django.forms.models import model_to_dict
 
 
-class ClientConsumer(WebsocketConsumer):
+class EventConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
         self.send(text_data=self.scope['user'].username)

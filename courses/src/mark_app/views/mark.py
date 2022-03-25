@@ -1,5 +1,8 @@
+import json
+
 from course_app.permissions import IsCourseTeacher
 from django.db.models import Q
+from django.forms.models import model_to_dict
 from mark_app.models import Mark
 from mark_app.serializers import (MarkCreateSerializer, MarkDetailsSerializer,
                                   MarkShortDetailsSerializer,
@@ -8,6 +11,9 @@ from mark_app.tasks import SendNewMarkEmailTask
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task
 from task_app.permissions import IsTaskAuthorOrCourseTeacher
+
+from ws_app.consts import WS_MARK_UPDATE_EVENT_KEY
+from ws_app.utils import send_ws_notification_to_groups
 
 
 class MarkViewSet(viewsets.ModelViewSet):
@@ -81,12 +87,18 @@ class MarkViewSet(viewsets.ModelViewSet):
             task = Task.objects\
                 .filter(task_statement__lecture__course__teachers=self.request.user.id)\
                 .get(pk=self.kwargs.get('task_pk'))
-            serializer.save(author=self.request.user, task=task)
+            mark = serializer.save(author=self.request.user, task=task)
+
+            send_ws_notification_to_groups(
+                [f'{WS_MARK_UPDATE_EVENT_KEY}_{task.author.username}'],
+                WS_MARK_UPDATE_EVENT_KEY,
+                model_to_dict(mark)
+            )
 
             if hasattr(task.author, 'email'):
                 mark_author_username = self.request.user.username
                 task_statement_title = task.task_statement.title
-                mark_value = serializer.validated_data.get('mark_value')
+                mark_value = mark.mark_value
                 SendNewMarkEmailTask().apply_async(
                     args=[
                         task.author.email,

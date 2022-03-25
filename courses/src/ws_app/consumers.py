@@ -1,16 +1,27 @@
 import json
+
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from django.forms.models import model_to_dict
+
+from ws_app.consts import WS_MARK_UPDATE_EVENT_KEY
 
 
 class EventConsumer(WebsocketConsumer):
     def connect(self):
+        self.group_name = ''
+        if self.scope['user'].is_authenticated:
+            self.group_name = f"{WS_MARK_UPDATE_EVENT_KEY}_{self.scope['user'].username}"
+            async_to_sync(self.channel_layer.group_add)(
+                self.group_name,
+                self.channel_name
+            )
         self.accept()
-        self.send(text_data=self.scope['user'].username)
 
     def disconnect(self, close_code):
-        pass
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name,
+            self.channel_name
+        )
 
-    def send_mark_to_student(self, mark):
-        mark_dict = model_to_dict(mark)
-        self.send(text_data=json.dumps(mark_dict))
+    def mark_update_event(self, event):
+        self.send(text_data=json.dumps(event))

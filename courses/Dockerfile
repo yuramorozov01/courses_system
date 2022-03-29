@@ -16,7 +16,7 @@ RUN groupadd --gid ${GID} ${DOCKER_LOGIN} \
 
 WORKDIR /app
 
-COPY ./courses_run.bash ./
+COPY ./courses_run.sh ./
 
 COPY ./requirements.txt ./
 RUN pip3 install -r requirements.txt
@@ -25,4 +25,4 @@ COPY ./src ./src
 
 USER ${DOCKER_LOGIN}
 
-CMD ['./courses_run.bash']
+CMD ['./courses_run.sh']

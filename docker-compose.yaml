@@ -1,11 +1,11 @@
-version: "2.2"
+version: "3.7"
 
 services:
   redis:
     image: redis
     restart: always
     volumes:
-      - redisvolume:/data
+      - ./courses/data/redis:/data
     env_file: ./.env
 
   worker_default:
@@ -15,15 +15,12 @@ services:
     volumes:
       - ./courses:/app
     entrypoint: []
-    command: ["celery", "--workdir=./src", "-A", "courses", "worker", "-Q", "default"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "celery", "--workdir=./src", "-A", "courses", "worker", "-Q", "default"]
     env_file: ./.env
     depends_on:
-      redis:
-        condition: service_started
-      beat:
-        condition: service_started
-      db:
-        condition: service_healthy
+      - redis
+      - beat
+      - db
 
   worker_email:
     restart: always
@@ -32,15 +29,12 @@ services:
     volumes:
       - ./courses:/app
     entrypoint: []
-    command: ["celery", "--workdir=./src", "-A", "courses", "worker", "-c", "1", "-Q", "email"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "celery", "--workdir=./src", "-A", "courses", "worker", "-c", "1", "-Q", "email"]
     env_file: ./.env
     depends_on:
-      redis:
-        condition: service_started
-      beat:
-        condition: service_started
-      db:
-        condition: service_healthy
+      - redis
+      - beat
+      - db
 
   beat:
     restart: always
@@ -49,13 +43,11 @@ services:
     volumes:
       - ./courses:/app
     entrypoint: []
-    command: ["celery", "--workdir=./src", "-A", "courses", "beat", "-l", "INFO", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "celery", "--workdir=./src", "-A", "courses", "beat", "-l", "INFO", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
     env_file: ./.env
     depends_on:
-      redis:
-        condition: service_started
-      db:
-        condition: service_healthy
+      - redis
+      - db
 
   courses:
     restart: always
@@ -66,19 +58,14 @@ services:
     volumes:
       - ./courses:/app
     entrypoint: []
-    command: ["./courses_run.bash"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "./courses_run.sh"]
     env_file: ./.env
     depends_on:
-      redis:
-        condition: service_started
-      beat:
-        condition: service_started
-      worker_default:
-        condition: service_started
-      worker_email:
-        condition: service_started
-      db:
-        condition: service_healthy
+      - redis
+      - beat
+      - worker_default
+      - worker_email
+      - db
 
   flower:
     restart: always
@@ -90,14 +77,10 @@ services:
     command: ["celery", "--workdir=./src", "-A", "courses", "flower"]
     env_file: ./.env
     depends_on:
-      beat:
-        condition: service_started
-      redis:
-        condition: service_started
-      worker_default:
-        condition: service_started
-      worker_email:
-        condition: service_started
+      - beat
+      - redis
+      - worker_default
+      - worker_email
 
   db:
     restart: always
@@ -105,20 +88,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgresqldbvolume:/var/lib/postgresql/data
+      - ./courses/data/postgres:/var/lib/postgresql/data
     env_file: ./.env
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  postgresqldbvolume:
-    driver: local
-  redisvolume:
-    driver: local

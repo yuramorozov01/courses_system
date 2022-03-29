@@ -1,3 +1,4 @@
+from course_app.filters import CourseFilter
 from course_app.models import Course
 from course_app.permissions import IsCourseAuthor, IsCourseTeacher
 from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
@@ -34,7 +35,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         Teachers can add user as a teacher or a student to course.
     '''
 
-    permission_classes = [permissions.IsAuthenticated]
+    filterset_class = CourseFilter
 
     def get_queryset(self):
         querysets_dict = {

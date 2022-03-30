@@ -5,11 +5,11 @@ from course_app.models import Course
 
 
 class CourseFilter(filters.FilterSet):
-    id__in = filters.BaseInFilter(field_name='id')
+    id = filters.BaseInFilter(field_name='id')
 
     title = filters.CharFilter(field_name='title', lookup_expr='icontains')
 
-    starts_at= filters.DateFilter(field_name='starts_at')
+    starts_at = filters.DateFilter(field_name='starts_at')
     ends_at = filters.DateFilter(field_name='ends_at')
 
     starts_at_range = filters.DateFromToRangeFilter(field_name='starts_at')

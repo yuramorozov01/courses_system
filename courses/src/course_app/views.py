@@ -1,3 +1,4 @@
+from course_app.filters import CourseFilter
 from course_app.models import Course
 from course_app.permissions import IsCourseAuthor, IsCourseTeacher
 from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
@@ -5,7 +6,8 @@ from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
                                     CourseDetailsSerializer,
                                     CourseShortDetailsSerializer,
                                     CourseUpdateFullSerializer)
-from rest_framework import permissions, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -34,7 +36,9 @@ class CourseViewSet(viewsets.ModelViewSet):
         Teachers can add user as a teacher or a student to course.
     '''
 
-    permission_classes = [permissions.IsAuthenticated]
+    filterset_class = CourseFilter
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['title', 'lectures__title']
 
     def get_queryset(self):
         querysets_dict = {

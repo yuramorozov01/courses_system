@@ -2,7 +2,6 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-
 from ws_app.consts import WS_MARK_UPDATE_EVENT_KEY
 
 

@@ -1,7 +1,6 @@
+from course_app.models import Course
 from django.db.models import Count
 from django_filters import rest_framework as filters
-
-from course_app.models import Course
 
 
 class CourseFilter(filters.FilterSet):

@@ -3,6 +3,8 @@ from course_app.validators import validate_date
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from simple_history.models import HistoricalRecords
+
 
 class Course(models.Model):
     '''Course model.
@@ -42,6 +44,8 @@ class Course(models.Model):
         related_name='attending_courses'
     )
     status = models.TextField(choices=StatusChoices.choices, default=StatusChoices.OPEN)
+
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['starts_at']

@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from simple_history.models import HistoricalRecords
+
 
 class Mark(models.Model):
     '''Mark model.
@@ -27,6 +29,8 @@ class Mark(models.Model):
         related_name='added_marks'
     )
     updated_at = models.DateTimeField('Updated time', auto_now=True)
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = 'Mark'
@@ -64,6 +68,8 @@ class Message(models.Model):
         related_name='children'
     )
     created_at = models.DateTimeField('Creation time', auto_now_add=True)
+
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['created_at']

@@ -2,6 +2,8 @@ from base_app.utils import get_unique_filename
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from simple_history.models import HistoricalRecords
+
 
 class Lecture(models.Model):
     '''Lecture model.
@@ -23,6 +25,8 @@ class Lecture(models.Model):
         related_name='own_lectures'
     )
     created_at = models.DateTimeField('Creation time', auto_now_add=True)
+
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['-created_at']
@@ -51,6 +55,8 @@ class LectureFile(models.Model):
         on_delete=models.CASCADE,
         related_name='own_lecture_files'
     )
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = 'Lecture file'

@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse
 
+from simple_history.models import HistoricalRecords
+
 
 class TaskStatement(models.Model):
     '''Task statement model.
@@ -24,6 +26,8 @@ class TaskStatement(models.Model):
         related_name='own_task_statements'
     )
     created_at = models.DateTimeField('Creation time', auto_now_add=True)
+
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['-created_at']
@@ -53,6 +57,8 @@ class TaskStatementFile(models.Model):
         related_name='own_task_statement_files'
     )
 
+    history = HistoricalRecords()
+
     class Meta:
         verbose_name = 'Task statement file'
         verbose_name_plural = 'Task statement files'
@@ -81,6 +87,8 @@ class Task(models.Model):
         related_name='own_tasks'
     )
     created_at = models.DateTimeField('Creation time', auto_now_add=True)
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = 'Task'
@@ -115,6 +123,8 @@ class TaskFile(models.Model):
         on_delete=models.CASCADE,
         related_name='own_task_files'
     )
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = 'Task file'

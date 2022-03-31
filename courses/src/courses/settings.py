@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'storages',
+
     'rest_framework',
     'djoser',
     'drf_yasg',
@@ -164,8 +166,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 
-MEDIA_URL = '/uploads/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_DEFAULT_ACL = config('AWS_DEFAULT_ACL')
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
+AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL')
+
+PRIVATE_MEDIA_LOCATION = config('PRIVATE_MEDIA_LOCATION')
+DEFAULT_FILE_STORAGE = 'courses.storage_backends.PrivateMediaStorage'
 
 
 # Default primary key field type

@@ -2,6 +2,7 @@ amqp==5.0.9
 asgiref==3.4.1
 attrs==21.2.0
 billiard==3.6.4.0
+boto3==1.17.58
 celery==5.2.3
 certifi==2021.10.8
 cffi==1.15.0
@@ -25,6 +26,7 @@ django-celery-results==2.3.0
 django-filter==21.1
 django-templated-mail==1.1.1
 django-timezone-field==4.2.3
+django-storages==1.11.1
 djangorestframework==3.13.0
 djangorestframework-simplejwt==4.8.0
 djoser==2.1.0

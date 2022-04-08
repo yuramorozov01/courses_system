@@ -1,0 +1,39 @@
+<div class="auth-block">
+    <form class="card" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="card-content">
+            <span class="card-title">Create</span>
+            <div class="input-field">
+                <input formControlName="email" id="email" type="email"
+                       [ngClass]="{'invalid': form.get('email').invalid && form.get('email').touched}" required>
+                <label for="email">Email:</label>
+                <span class="helper-text red-text" *ngIf="form.get('email').invalid && form.get('email').touched">
+                    <span *ngIf="form.get('email').errors['required']">Enter email</span>
+                    <span *ngIf="form.get('email').errors['email']">Enter correct email</span>
+                </span>
+            </div>
+            <div class="input-field">
+                <input formControlName="username" id="username" type="text"
+                       [ngClass]="{'invalid': form.get('username').invalid && form.get('username').touched}" required>
+                <label for="username">username:</label>
+                <span class="helper-text red-text" *ngIf="form.get('username').invalid && form.get('username').touched">
+                    <span *ngIf="form.get('username').errors['required']">Enter username</span>
+                </span>
+            </div>
+            <div class="input-field">
+                <input formControlName="password" id="password" type="password"
+                       [ngClass]="{'invalid': form.get('password').invalid && form.get('password').touched}" required>
+                <label for="password">Password:</label>
+                <span class="helper-text red-text" *ngIf="form.get('password').invalid && form.get('password').touched">
+                    <span *ngIf="form.get('password').errors['required']">Enter password</span>
+                    <span
+                            *ngIf="form.get('password').errors['minlength'] && form.get('password').errors['minlength']['requiredLength']">Enter password at least {{ form.get('password').errors['minlength']['requiredLength'] }}
+                        symbols</span>
+                </span>
+            </div>
+        </div>
+        <div class="card-action">
+            <button class="modal-action btn waves-effect" type="submit" [disabled]="form.invalid || form.disabled">Create
+            </button>
+        </div>
+    </form>
+</div>

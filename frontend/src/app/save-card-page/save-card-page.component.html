@@ -1,0 +1,24 @@
+<div class="center-align">
+    <h4>
+        <a class="black-text" routerLink="/save_card">Save card</a>
+    </h4>
+</div>
+
+<div class="auth-block" *ngIf="clientSecret">
+    <form class="col s12 m12 l12" [formGroup]="form" (ngSubmit)="saveCard()">
+        <ng-container *ngIf="clientSecret">
+            <ngx-stripe-payment [clientSecret]="clientSecret.client_secret" [elementsOptions]="elementsOptions">
+            </ngx-stripe-payment>
+        </ng-container>
+        <div class="input-field">
+            <input formControlName="name" id="name" type="text" [ngClass]="{'invalid': form.get('name').invalid && form.get('name').touched}" required>
+            <label for="name">Name</label>
+            <span class="helper-text red-text" *ngIf="form.get('name').invalid && form.get('name').touched">
+            	<span *ngIf="form.get('name').errors['required']">Enter name</span>
+            </span>
+        </div>
+        <button type="submit" [disabled]="form.invalid || form.disabled" class="waves-effect waves-light btn">
+            Save card
+        </button>
+    </form>
+</div>

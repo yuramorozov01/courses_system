@@ -42,6 +42,7 @@ class Course(models.Model):
         related_name='attending_courses'
     )
     status = models.TextField(choices=StatusChoices.choices, default=StatusChoices.OPEN)
+    price = models.PositiveIntegerField('Price', default=0)
 
     class Meta:
         ordering = ['starts_at']

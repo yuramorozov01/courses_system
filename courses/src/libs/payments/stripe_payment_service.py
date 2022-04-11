@@ -1,5 +1,6 @@
 import stripe
-from libs.exceptions import CustomerNotCreatedException
+from stripe.error import InvalidRequestError
+from libs.payments.exceptions import CustomerNotCreatedException
 
 from django.conf import settings
 
@@ -31,3 +32,9 @@ class StripePaymentService:
         )
         return intent
 
+    def retrieve_payment_method(self, pm_id):
+        try:
+            payment_method = stripe.PaymentMethod.retrieve(pm_id)
+        except InvalidRequestError:
+            payment_method = None
+        return payment_method

@@ -8,6 +8,11 @@ router.register(
     payments_views.PaymentsViewSet,
     basename='payments'
 )
+router.register(
+    r'payments',
+    payments_views.CardViewSet,
+    basename='payments'
+)
 
 urlpatterns = [
     path(r'', include(router.urls)),

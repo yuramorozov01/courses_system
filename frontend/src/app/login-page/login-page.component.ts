@@ -54,7 +54,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         this.form.disable();
         this.aSub = this.auth.login(this.form.value).subscribe(
             (tokens: any) => {
-                this.router.navigate(['/harmonic_signal']);
+                this.router.navigate(['/']);
             },
             error => {
                 MaterializeService.toast(error.error);

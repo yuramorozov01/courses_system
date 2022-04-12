@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
+from django.core.validators import (MaxValueValidator, MinLengthValidator,
+                                    MinValueValidator)
 from django.db import models
 from payments_app.choices import CardFundingTypeChoices
 

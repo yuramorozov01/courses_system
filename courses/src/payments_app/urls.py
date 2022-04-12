@@ -1,5 +1,5 @@
-from payments_app import views as payments_views
 from django.urls import include, path
+from payments_app import views as payments_views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()

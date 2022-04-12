@@ -1,7 +1,7 @@
+from libs.payments import PaymentService
 from payments_app.models import Card
 from payments_app.serializers import CardShortDetailsSerializer
-from libs.payments import PaymentService
-from rest_framework import permissions, viewsets, mixins, status
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.validators import ValidationError
@@ -25,7 +25,7 @@ class PaymentsViewSet(viewsets.ViewSet):
     def client_secret(self, request):
         payment_service = PaymentService(self.request.user)
         response = {
-            'client_secret': payment_service.get_client_secret_key(),
+            'client_secret': payment_service.get_setup_intent_client_secret_key(),
         }
         return Response(response)
 
@@ -70,7 +70,8 @@ class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
         payment_service = PaymentService(self.request.user)
         pm_id = self.request.POST.get('pm_id', '')
         try:
-            payment_service.save_card_into_db(pm_id=pm_id)
+            card = payment_service.save_card_into_db(pm_id=pm_id)
+            serializer = self.get_serializer()
+            return Response(serializer.to_representation(card), status=status.HTTP_201_CREATED)
         except ValidationError as e:
             raise ValidationError(e.detail)
-        return Response({}, status=status.HTTP_201_CREATED)

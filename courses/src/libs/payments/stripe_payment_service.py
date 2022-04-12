@@ -1,8 +1,7 @@
 import stripe
-from stripe.error import InvalidRequestError
-from libs.payments.exceptions import CustomerNotCreatedException
-
 from django.conf import settings
+from libs.payments.exceptions import CustomerNotCreatedException
+from stripe.error import InvalidRequestError
 
 
 class StripePaymentService:
@@ -24,7 +23,7 @@ class StripePaymentService:
         customer = stripe.Customer.retrieve(stripe_id)
         return customer
 
-    def create_intent(self, customer_id, payment_method_types=None):
+    def create_setup_intent(self, customer_id, payment_method_types=None):
         methods = payment_method_types or ['card']
         intent = stripe.SetupIntent.create(
             customer=customer_id,

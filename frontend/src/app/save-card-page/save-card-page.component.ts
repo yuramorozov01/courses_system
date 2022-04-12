@@ -10,7 +10,7 @@ import { StripeService, StripePaymentElementComponent } from 'ngx-stripe';
 import { SetupIntent, StripeElementsOptions } from '@stripe/stripe-js';
 
 import { PaymentService } from '../shared/services/payment/payment.service';
-import { IClientSecret } from '../shared/interfaces/payment.interfaces';
+import { IClientSecret, ICardList } from '../shared/interfaces/payment.interfaces';
 import { MaterializeService } from '../shared/services/utils/materialize.service';
 
 @Component({
@@ -75,8 +75,7 @@ export class SaveCardPageComponent implements OnInit {
                         }
                         let obs$ = this.paymentService.saveCard(pm_id);
                         obs$.subscribe(
-                            (msg) => {
-
+                            (card: ICardList) => {
                             },
                             (error) => {
                                 MaterializeService.toast(error.error);

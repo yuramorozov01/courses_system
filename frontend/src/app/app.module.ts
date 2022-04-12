@@ -22,6 +22,9 @@ import { LoaderComponent } from './shared/components/loader/loader.component';
 
 import { MainPageComponent } from './main-page/main-page.component';
 import { SaveCardPageComponent } from './save-card-page/save-card-page.component';
+import { BuyModalComponent } from './shared/components/buy-modal/buy-modal.component';
+import { BuyCoursesPageComponent } from './buy-courses-page/buy-courses-page.component';
+
 
 
 @NgModule({
@@ -33,6 +36,8 @@ import { SaveCardPageComponent } from './save-card-page/save-card-page.component
         LoaderComponent,
         MainPageComponent,
         SaveCardPageComponent,
+        BuyCoursesPageComponent,
+        BuyModalComponent,
     ],
     imports: [
         BrowserModule,

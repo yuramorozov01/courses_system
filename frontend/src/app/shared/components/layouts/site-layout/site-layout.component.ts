@@ -22,6 +22,10 @@ export class SiteLayoutComponent implements OnInit {
             url: '/save_card',
             name: 'Save card',
         },
+        {
+            url: '/buy_courses',
+            name: 'Buy course',
+        },
     ];
 
     constructor(public authService: AuthService,

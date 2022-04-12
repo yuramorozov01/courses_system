@@ -11,6 +11,8 @@ import { RegisterPageComponent } from './register-page/register-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SaveCardPageComponent } from './save-card-page/save-card-page.component';
 
+import { BuyCoursesPageComponent } from './buy-courses-page/buy-courses-page.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -32,6 +34,11 @@ const routes: Routes = [
             {
                 path: 'save_card',
                 component: SaveCardPageComponent,
+                canActivate: [AuthGuard],
+            },
+            {
+                path: 'buy_courses',
+                component: BuyCoursesPageComponent,
                 canActivate: [AuthGuard],
             },
         ],

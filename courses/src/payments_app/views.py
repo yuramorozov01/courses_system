@@ -1,4 +1,5 @@
-from django.db.utils import IntegrityError
+from payments_app.models import Card
+from payments_app.serializers import CardShortDetailsSerializer
 from libs.payments import PaymentService
 from rest_framework import permissions, viewsets, mixins, status
 from rest_framework.decorators import action
@@ -29,16 +30,36 @@ class PaymentsViewSet(viewsets.ViewSet):
         return Response(response)
 
 
-class CardViewSet(viewsets.ViewSet):
+class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     """
+    list:
+        Get all user's saved cards
+
     save_card:
         Save card for future payments
         Retrieves payment method ID as parameter `pm_id`
     """
 
+    def get_queryset(self):
+        querysets_dict = {
+            'list': Card.objects.filter(user=self.request.user),
+            'save_card': Card.objects.filter(user=self.request.user),
+        }
+        queryset = querysets_dict.get(self.action)
+        return queryset.distinct()
+
+    def get_serializer_class(self):
+        serializers_dict = {
+            'list': CardShortDetailsSerializer,
+            'save_card': CardShortDetailsSerializer,
+        }
+        serializer_class = serializers_dict.get(self.action)
+        return serializer_class
+
     def get_permissions(self):
         base_permissions = [permissions.IsAuthenticated]
         permissions_dict = {
+            'list': [],
             'save_card': [],
         }
         base_permissions += permissions_dict.get(self.action, [])

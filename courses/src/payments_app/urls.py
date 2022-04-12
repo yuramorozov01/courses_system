@@ -9,9 +9,9 @@ router.register(
     basename='payments'
 )
 router.register(
-    r'payments',
+    r'card',
     payments_views.CardViewSet,
-    basename='payments'
+    basename='card'
 )
 
 urlpatterns = [

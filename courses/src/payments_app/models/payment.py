@@ -11,13 +11,6 @@ class Payment(models.Model):
         related_name='payments',
         null=True
     )
-    course = models.ForeignKey(
-        'course_app.Course',
-        verbose_name='Course',
-        on_delete=models.SET_NULL,
-        related_name='payments',
-        null=True
-    )
     payment_intent_id = models.CharField('Payment intent ID', max_length=254, editable=False, unique=True)
     payment_method_id = models.CharField('Payment method ID', max_length=254, editable=False)
     amount = models.PositiveIntegerField('Amount')
@@ -41,4 +34,29 @@ class Payment(models.Model):
         verbose_name_plural = 'Payments'
 
     def __str__(self):
-        return f'{self.course}: {self.amount} - {self.created} - {self.get_status_display()} ({self.user})'
+        return f'{self.amount} - {self.created} - {self.get_status_display()} ({self.user})'
+
+
+class PaymentCourse(models.Model):
+    user = models.ForeignKey(
+        get_user_model(),
+        verbose_name='User',
+        on_delete=models.SET_NULL,
+        related_name='purchased_courses',
+        null=True
+    )
+    payment = models.OneToOneField(
+        Payment,
+        verbose_name='Payment',
+        on_delete=models.CASCADE,
+        related_name='purchased_courses'
+    )
+    course = models.ForeignKey(
+        'course_app.Course',
+        verbose_name='Course',
+        on_delete=models.CASCADE,
+        related_name='payments',
+    )
+
+    def __str__(self):
+        return f'{self.user} - {self.course} - {self.payment}'

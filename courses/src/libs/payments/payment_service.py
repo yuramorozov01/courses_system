@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from libs.payments.exceptions import CustomerNotCreatedException
 from libs.payments.stripe_payment_service import StripePaymentService
 from payments_app.choices import PaymentStatusChoices
-from payments_app.models import Card, Customer, Payment
+from payments_app.models import Card, Customer, Payment, PaymentCourse
 from rest_framework.validators import ValidationError
 
 User = get_user_model()
@@ -52,7 +52,12 @@ class PaymentService:
         except Course.DoesNotExist:
             raise ValidationError({'course_id': 'Unknown course ID'})
 
-        if Payment.objects.filter(course=course, user=self._user, status=PaymentStatusChoices.SUCCEEDED).exists():
+        queryset = PaymentCourse.objects.filter(
+            course=course,
+            user=self._user,
+            payment__status=PaymentStatusChoices.SUCCEEDED
+        )
+        if queryset.exists():
             raise ValidationError({'course_id': 'You have already purchased this course!'})
 
         process_statuses = [
@@ -61,7 +66,12 @@ class PaymentService:
             PaymentStatusChoices.PROCESSING,
             PaymentStatusChoices.REQUIRES_CAPTURE,
         ]
-        if Payment.objects.filter(course=course, user=self._user, status__in=process_statuses).exists():
+        queryset = PaymentCourse.objects.filter(
+            course=course,
+            user=self._user,
+            payment__status__in=process_statuses
+        )
+        if queryset.exists():
             raise ValidationError({
                 'course_id': 'You cannot purchase this course until previous operation is completed'
             })
@@ -77,10 +87,8 @@ class PaymentService:
             card.customer.stripe_id,
             pm_id
         )
-
         payment = Payment.objects.create(
             user=self._user,
-            course=course,
             payment_intent_id=payment_intent.id,
             payment_method_id=payment_intent.payment_method,
             amount=payment_intent.amount,
@@ -88,5 +96,10 @@ class PaymentService:
             customer=card.customer,
             status=payment_intent.status,
             created=arrow.get(payment_intent.created).datetime
+        )
+        PaymentCourse.objects.create(
+            user=self._user,
+            payment=payment,
+            course=course
         )
         return payment

@@ -61,7 +61,7 @@ class CourseViewSet(viewsets.ModelViewSet):
                 price=0
             ).exclude(
                 payments__user=self.request.user.id,
-                payments__status=PaymentStatusChoices.SUCCEEDED
+                payments__payment__status=PaymentStatusChoices.SUCCEEDED
             ),
         }
         queryset = querysets_dict.get(self.action)

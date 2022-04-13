@@ -6,8 +6,9 @@ class Customer(models.Model):
     user = models.OneToOneField(
         get_user_model(),
         verbose_name='User',
-        on_delete=models.CASCADE,
-        related_name='customer'
+        on_delete=models.SET_NULL,
+        related_name='customer',
+        null=True
     )
     stripe_id = models.CharField('Stripe customer ID', max_length=254, editable=False, unique=True)
 

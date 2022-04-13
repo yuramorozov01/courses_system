@@ -9,6 +9,7 @@ from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from payments_app.choices import PaymentStatusChoices
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -58,6 +59,9 @@ class CourseViewSet(viewsets.ModelViewSet):
                 students=self.request.user.id
             ).exclude(
                 price=0
+            ).exclude(
+                payments__user=self.request.user.id,
+                payments__status=PaymentStatusChoices.SUCCEEDED
             ),
         }
         queryset = querysets_dict.get(self.action)

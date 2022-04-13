@@ -1,16 +1,19 @@
 import arrow
+from django.contrib.auth import get_user_model
 from libs.payments.exceptions import CustomerNotCreatedException
 from libs.payments.stripe_payment_service import StripePaymentService
-from payments_app.models import Card, Customer
+from payments_app.models import Card, Customer, Payment
 from rest_framework.validators import ValidationError
+
+User = get_user_model()
 
 
 class PaymentService:
-    def __init__(self, user):
+    def __init__(self, user: User) -> None:
         self._user = user
         self._payment_service = StripePaymentService(user=user)
 
-    def get_setup_intent_client_secret_key(self):
+    def get_setup_intent_client_secret_key(self) -> str:
         try:
             customer = self._payment_service.get_customer()
         except CustomerNotCreatedException:
@@ -19,7 +22,7 @@ class PaymentService:
         intent = self._payment_service.create_setup_intent(customer.stripe_id, payment_method_types=['card'])
         return intent.client_secret
 
-    def save_card_into_db(self, pm_id=''):
+    def save_card_into_db(self, pm_id: str = '') -> Card:
         payment_method = self._payment_service.retrieve_payment_method(pm_id)
         if payment_method is None:
             raise ValidationError({'pm_id': 'Unknown payment method id'})

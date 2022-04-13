@@ -1,11 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
 import { MaterializeService } from '../../services/utils/materialize.service';
 import { PaymentService } from '../../services/payment/payment.service';
 import { ICourseList } from '../../interfaces/courses.interfaces';
-import { ICardList } from '../../interfaces/payment.interfaces';
+import { ICardList, IPaymentResult } from '../../interfaces/payment.interfaces';
 
 @Component({
     selector: 'app-buy-modal',
@@ -15,7 +16,7 @@ import { ICardList } from '../../interfaces/payment.interfaces';
 export class BuyModalComponent implements OnInit, AfterViewInit {
     @ViewChild('modal') modalRef: ElementRef;
     cards$: Observable<ICardList[]>;
-
+    form: FormGroup;
 
     private modalElement;
     public course: ICourseList;
@@ -24,6 +25,10 @@ export class BuyModalComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.form = new FormGroup({
+            pm_id: new FormControl(null, [Validators.required,]),
+		});
+
         this.cards$ = this.paymentService.getSavedCards();
         this.cards$.subscribe(
             (cards: ICardList[]) => {
@@ -46,7 +51,18 @@ export class BuyModalComponent implements OnInit, AfterViewInit {
     public buy() {
         const decision = window.confirm('Are you sure you want to buy this course?');
         if (decision) {
-            this.modalElement.close();
+            if (this.form.invalid) {
+                window.alert('You have to choose card to buy this course!')
+            } else {
+                let pm_id = this.form.get('pm_id').value;
+                this.paymentService.buyCourse(pm_id, this.course.id).subscribe(
+                    (paymentResult: IPaymentResult) => {
+                        let price = (this.course.price / 100).toFixed(2);
+                        window.alert(`Status: ${paymentResult.status}\nPrice: ${paymentResult.currency} ${price}`);
+                        this.modalElement.close();
+                    }
+                );
+            }
         }
     }
 }

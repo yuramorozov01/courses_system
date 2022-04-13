@@ -12,3 +12,9 @@ export interface ICardList {
     exp_year: number;
     last4: string;
 }
+
+export interface IPaymentResult {
+    status: string;
+    amount: number;
+    currency: string;
+}

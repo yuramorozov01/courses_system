@@ -81,7 +81,8 @@ class PaymentService:
         payment = Payment.objects.create(
             user=self._user,
             course=course,
-            pm_id=payment_intent.payment_method,
+            payment_intent_id=payment_intent.id,
+            payment_method_id=payment_intent.payment_method,
             amount=payment_intent.amount,
             currency=payment_intent.currency,
             customer=card.customer,

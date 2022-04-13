@@ -18,7 +18,8 @@ class Payment(models.Model):
         related_name='payments',
         null=True
     )
-    pm_id = models.CharField('Payment method ID', max_length=254, editable=False)
+    payment_intent_id = models.CharField('Payment intent ID', max_length=254, editable=False, unique=True)
+    payment_method_id = models.CharField('Payment method ID', max_length=254, editable=False)
     amount = models.PositiveIntegerField('Amount')
     currency = models.CharField('Currency', max_length=3)
     customer = models.ForeignKey(

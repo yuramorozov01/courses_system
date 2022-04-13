@@ -1,4 +1,5 @@
 import arrow
+from course_app.models import Course
 from django.contrib.auth import get_user_model
 from libs.payments.exceptions import CustomerNotCreatedException
 from libs.payments.stripe_payment_service import StripePaymentService
@@ -42,3 +43,33 @@ class PaymentService:
             customer=customer
         )
         return card
+
+    def buy_course(self, course_id: int, pm_id: str) -> Payment:
+        currency = 'eur'
+        try:
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            raise ValidationError({'course_id': 'Unknown course ID'})
+        try:
+            card = Card.objects.get(pm_id=pm_id)
+        except Card.DoesNotExist:
+            raise ValidationError({'pm_id': 'Unknown payment method ID'})
+
+        payment_intent = self._payment_service.create_payment_intent(
+            course.price,
+            currency,
+            card.customer.stripe_id,
+            pm_id
+        )
+
+        payment = Payment.objects.create(
+            user=self._user,
+            course=course,
+            pm_id=payment_intent.payment_method,
+            amount=payment_intent.amount,
+            currency=payment_intent.currency,
+            customer=card.customer,
+            status=payment_intent.status,
+            created=arrow.get(payment_intent.created).datetime
+        )
+        return payment

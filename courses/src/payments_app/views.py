@@ -7,16 +7,22 @@ from rest_framework.response import Response
 from rest_framework.validators import ValidationError
 
 
-class PaymentsViewSet(viewsets.ViewSet):
+class PaymentViewSet(viewsets.ViewSet):
     """
     client_secret:
         Retrieve client secret key
+
+    buy_course:
+        Buy course. Request has to contain the following POST params:
+        `pm_id` - payment method ID
+        `course_id` - course ID
     """
 
     def get_permissions(self):
         base_permissions = [permissions.IsAuthenticated]
         permissions_dict = {
             'client_secret': [],
+            'buy_course': [],
         }
         base_permissions += permissions_dict.get(self.action, [])
         return [permission() for permission in base_permissions]
@@ -28,6 +34,25 @@ class PaymentsViewSet(viewsets.ViewSet):
             'client_secret': payment_service.get_setup_intent_client_secret_key(),
         }
         return Response(response)
+
+    @action(methods=['POST'], detail=False)
+    def buy_course(self, request):
+        payment_service = PaymentService(self.request.user)
+
+        pm_id = self.request.POST.get('pm_id')
+        if pm_id is None:
+            raise ValidationError({'pm_id': 'Payment ID is not specified'})
+        course_id = self.request.POST.get('course_id')
+        if course_id is None:
+            raise ValidationError({'course_id': 'Course ID is not specified'})
+
+        payment = payment_service.buy_course(course_id, pm_id)
+        response = {
+            'status': payment.get_status_display(),
+            'amount': payment.amount,
+            'currency': payment.currency,
+        }
+        return Response(response, status=status.HTTP_201_CREATED)
 
 
 class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
@@ -69,9 +94,6 @@ class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     def save_card(self, request):
         payment_service = PaymentService(self.request.user)
         pm_id = self.request.POST.get('pm_id', '')
-        try:
-            card = payment_service.save_card_into_db(pm_id=pm_id)
-            serializer = self.get_serializer()
-            return Response(serializer.to_representation(card), status=status.HTTP_201_CREATED)
-        except ValidationError as e:
-            raise ValidationError(e.detail)
+        card = payment_service.save_card_into_db(pm_id=pm_id)
+        serializer = self.get_serializer()
+        return Response(serializer.to_representation(card), status=status.HTTP_201_CREATED)

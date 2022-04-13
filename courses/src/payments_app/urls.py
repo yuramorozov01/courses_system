@@ -4,9 +4,9 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(
-    r'payments',
-    payments_views.PaymentsViewSet,
-    basename='payments'
+    r'payment',
+    payments_views.PaymentViewSet,
+    basename='payment'
 )
 router.register(
     r'card',

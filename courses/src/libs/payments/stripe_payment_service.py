@@ -40,3 +40,19 @@ class StripePaymentService:
         except InvalidRequestError:
             payment_method = None
         return payment_method
+
+    def create_payment_intent(self, amount: int, currency: str, customer_id: str, pm_id: str) -> stripe.PaymentIntent:
+        try:
+            payment_intent = stripe.PaymentIntent.create(
+                amount=amount,
+                currency=currency or 'eur',
+                customer=customer_id,
+                payment_method=pm_id,
+                off_session=True,
+                confirm=True,
+            )
+        except stripe.error.CardError as e:
+            err = e.error
+            payment_intent_id = err.payment_intent['id']
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+        return payment_intent

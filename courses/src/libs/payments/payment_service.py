@@ -47,39 +47,8 @@ class PaymentService:
 
     def buy_course(self, course_id: int, pm_id: str) -> Payment:
         currency = 'eur'
-        try:
-            course = Course.objects.get(id=course_id)
-        except Course.DoesNotExist:
-            raise ValidationError({'course_id': 'Unknown course ID'})
-
-        queryset = PaymentCourse.objects.filter(
-            course=course,
-            user=self._user,
-            payment__status=PaymentStatusChoices.SUCCEEDED
-        )
-        if queryset.exists():
-            raise ValidationError({'course_id': 'You have already purchased this course!'})
-
-        process_statuses = [
-            PaymentStatusChoices.REQUIRES_CONFIRMATION,
-            PaymentStatusChoices.REQUIRES_ACTION,
-            PaymentStatusChoices.PROCESSING,
-            PaymentStatusChoices.REQUIRES_CAPTURE,
-        ]
-        queryset = PaymentCourse.objects.filter(
-            course=course,
-            user=self._user,
-            payment__status__in=process_statuses
-        )
-        if queryset.exists():
-            raise ValidationError({
-                'course_id': 'You cannot purchase this course until previous operation is completed'
-            })
-
-        try:
-            card = Card.objects.get(pm_id=pm_id)
-        except Card.DoesNotExist:
-            raise ValidationError({'pm_id': 'Unknown payment method ID'})
+        course = Course.objects.get(id=course_id)
+        card = Card.objects.get(pm_id=pm_id)
 
         payment_intent = self._payment_service.create_payment_intent(
             course.price,

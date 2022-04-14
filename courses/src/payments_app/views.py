@@ -1,10 +1,10 @@
 from libs.payments import PaymentService
 from payments_app.models import Card
 from payments_app.serializers import CardShortDetailsSerializer
+from payments_app.validators import validate_buy_course_data
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.validators import ValidationError
 
 
 class PaymentViewSet(viewsets.ViewSet):
@@ -37,15 +37,12 @@ class PaymentViewSet(viewsets.ViewSet):
 
     @action(methods=['POST'], detail=False)
     def buy_course(self, request):
+        course_id, pm_id = validate_buy_course_data(
+            self.request.user,
+            self.request.POST.get('course_id'),
+            self.request.POST.get('pm_id')
+        )
         payment_service = PaymentService(self.request.user)
-
-        pm_id = self.request.POST.get('pm_id')
-        if pm_id is None:
-            raise ValidationError({'pm_id': 'Payment ID is not specified'})
-        course_id = self.request.POST.get('course_id')
-        if course_id is None:
-            raise ValidationError({'course_id': 'Course ID is not specified'})
-
         payment = payment_service.buy_course(course_id, pm_id)
         response = {
             'status': payment.get_status_display(),

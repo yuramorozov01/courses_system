@@ -20,18 +20,29 @@ app.autodiscover_tasks()
 # Create scheduled tasks
 app.conf.beat_schedule = {
     # Executes daily at midnight
-    'daily-at-midnight-send-unreviewed-tasks': {
+    'daily_at_midnight_send_unreviewed_tasks': {
         'task': 'task_app.tasks.SendEmailWithUnreviewedTasksTask',
         'schedule': crontab(minute=0, hour=0),
-        # 'schedule': crontab(minute='*/1'),
-        'options': {'queue': 'email', 'priority': 5},
     },
-    'calc-amount-of-students-every-5-min': {
+    'calc_amount_of_students_every_5_min': {
         'task': 'course_app.tasks.CalcAmountOfStudentsInCourseTask',
         'schedule': crontab(minute='*/5'),
-        # 'schedule': crontab(minute='*/1'),
-        'options': {'queue': 'default'},
     }
+}
+
+app.conf.task_routes = {
+    'task_app.tasks.SendEmailWithUnreviewedTasksTask': {
+        'queue': 'email',
+        'priority': 5,
+    },
+    'course_app.tasks.CalcAmountOfStudentsInCourseTask': {
+        'queue': 'default',
+        'priority': 8,
+    },
+    'send_new_mark_email': {
+        'queue': 'email',
+        'priority': 2,
+    },
 }
 
 

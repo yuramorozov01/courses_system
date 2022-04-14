@@ -6,8 +6,6 @@ from task_app.models import Task
 
 
 class SendEmailWithUnreviewedTasksTask(CeleryTask):
-    # name = 'daily-at-midnight-send-unreviewed-tasks'
-
     def run(self, *args, **kwargs):
         unreviewed_tasks = Task.objects.filter(mark=None).prefetch_related(
             'task_statement',

@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 
 
 class SendNewMarkEmailTask(Task):
-    name = 'send-new-mark-email'
+    name = 'send_new_mark_email'
 
     def run(self, email, mark_author_username, task_statement_title, mark_value, *args, **kwargs):
         send_mail(

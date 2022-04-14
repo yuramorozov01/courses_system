@@ -105,8 +105,6 @@ class MarkViewSet(viewsets.ModelViewSet):
                         task_statement_title,
                         mark_value,
                     ],
-                    queue='email',
-                    priority=9,
                 )
         except Task.DoesNotExist:
             raise serializers.ValidationError('You can add marks only in teaching courses')

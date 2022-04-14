@@ -49,7 +49,7 @@ class PaymentCourse(models.Model):
         Payment,
         verbose_name='Payment',
         on_delete=models.CASCADE,
-        related_name='purchased_courses'
+        related_name='purchased_course'
     )
     course = models.ForeignKey(
         'course_app.Course',

@@ -2,7 +2,7 @@ import stripe
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from libs.payments.exceptions import CustomerNotCreatedException
-from stripe.error import InvalidRequestError
+from stripe.error import CardError, InvalidRequestError
 
 User = get_user_model()
 
@@ -41,7 +41,8 @@ class StripePaymentService:
             payment_method = None
         return payment_method
 
-    def create_payment_intent(self, amount: int, currency: str, customer_id: str, pm_id: str) -> stripe.PaymentIntent:
+    def create_payment_intent(self, amount: int, currency: str, customer_id: str,
+                              pm_id: str, capture_method: str = 'automatic') -> stripe.PaymentIntent:
         try:
             payment_intent = stripe.PaymentIntent.create(
                 amount=amount,
@@ -50,9 +51,21 @@ class StripePaymentService:
                 payment_method=pm_id,
                 off_session=True,
                 confirm=True,
+                capture_method=capture_method
             )
-        except stripe.error.CardError as e:
+        except CardError as e:
             err = e.error
             payment_intent_id = err.payment_intent['id']
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+        return payment_intent
+
+    def hold_money(self, amount: int, currency: str, customer_id: str, pm_id: str) -> stripe.PaymentIntent:
+        payment_intent = self.create_payment_intent(amount, currency, customer_id, pm_id, capture_method='manual')
+        return payment_intent
+
+    def capture_money(self, pm_id: str, amount_to_capture: int = None) -> stripe.PaymentIntent:
+        payment_intent = stripe.PaymentIntent.capture(
+            pm_id,
+            amount_to_capture=amount_to_capture
+        )
         return payment_intent

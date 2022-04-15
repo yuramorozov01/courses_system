@@ -53,7 +53,7 @@ class PaymentViewSet(viewsets.ViewSet):
         payment_service = PaymentService(self.request.user)
         payment = payment_service.buy_course(
             Course.objects.get(id=course_id),
-            Card.objects.get(id=pm_id)
+            Card.objects.get(pm_id=pm_id)
         )
         response = {
             'status': payment.get_status_display(),

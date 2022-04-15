@@ -63,6 +63,11 @@ class CourseViewSet(viewsets.ModelViewSet):
                 payments__user=self.request.user.id,
                 payments__payment__status=PaymentStatusChoices.SUCCEEDED
             ),
+            'purchased': Course.objects.filter(
+                status=StatusChoices.OPEN,
+                payments__user=self.request.user.id,
+                payments__payment__status=PaymentStatusChoices.SUCCEEDED
+            ),
         }
         queryset = querysets_dict.get(self.action)
         return queryset.distinct()
@@ -77,6 +82,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             'teaching': CourseShortDetailsSerializer,
             'studying': CourseShortDetailsSerializer,
             'to_buy': CourseShortDetailsSerializer,
+            'purchased': CourseShortDetailsSerializer,
         }
         serializer_class = serializers_dict.get(self.action)
         return serializer_class
@@ -90,6 +96,8 @@ class CourseViewSet(viewsets.ModelViewSet):
             'list': [],
             'update': [IsCourseAuthor],
             'partial_update': [IsCourseTeacher],
+            'to_buy': [],
+            'purchased': [],
         }
         base_permissions += permissions_dict.get(self.action, [])
         return [permission() for permission in base_permissions]
@@ -114,6 +122,13 @@ class CourseViewSet(viewsets.ModelViewSet):
     @action(methods=['GET'], detail=False)
     def to_buy(self, request):
         '''Get a list of available to buy courses'''
+        queryset = self.get_queryset()
+        serializer = self.get_serializer_class()(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(methods=['GET'], detail=False)
+    def purchased(self, request):
+        '''Get a list of all purchased courses'''
         queryset = self.get_queryset()
         serializer = self.get_serializer_class()(queryset, many=True)
         return Response(serializer.data)

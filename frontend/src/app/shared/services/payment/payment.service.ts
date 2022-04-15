@@ -40,4 +40,14 @@ export class PaymentService {
         body.set('course_id', course_id.toString());
         return this.http.post<IPaymentResult>('/api/v1/payment/buy_course/', body);
     }
+
+    getPurchasedCourses(): Observable<ICourseList[]> {
+        return this.http.get<ICourseList[]>('/api/v1/course/purchased/');
+    }
+
+    refundCourse(course_id: number): Observable<any> {
+        let body = new FormData();
+        body.set('course_id', course_id.toString());
+        return this.http.post<any>('/api/v1/payment/refund/', body);
+    }
 }

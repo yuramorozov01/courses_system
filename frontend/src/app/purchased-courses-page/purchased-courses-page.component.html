@@ -1,0 +1,42 @@
+<div class="page-title">
+    <h4>
+        <a routerLink="/purchased_courses">Purchased courses (only active)</a>
+    </h4>
+</div>
+
+<div class="row" *ngIf="courses$ | async as courses; else loader">
+    <table class="highlight" *ngIf="courses.length !== 0; else empty">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Price (EUR)</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let course of courses">
+                <td>{{ course.id }}</td>
+                <td>{{ course.title }}</td>
+                <td>{{ course.starts_at }}</td>
+                <td>{{ course.ends_at }}</td>
+                <td>{{ course.price / 100 | number :'1.2-2'}}</td>
+                <td>{{ course.status }}</td>
+                <td>
+                    <button type="button" class="btn waves-effect wavers-light btn-small red" (click)="refund(course)">Refund</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #empty>
+        <div class="center">There are not purchased courses!</div>
+    </ng-template>
+</div>
+
+<ng-template #loader>
+	<app-loader></app-loader>
+</ng-template>

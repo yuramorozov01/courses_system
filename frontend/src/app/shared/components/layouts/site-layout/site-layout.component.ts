@@ -26,6 +26,10 @@ export class SiteLayoutComponent implements OnInit {
             url: '/buy_courses',
             name: 'Buy course',
         },
+        {
+            url: '/purchased_courses',
+            name: 'Purchased courses',
+        },
     ];
 
     constructor(public authService: AuthService,

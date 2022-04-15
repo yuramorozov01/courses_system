@@ -60,6 +60,9 @@ export class BuyModalComponent implements OnInit, AfterViewInit {
                         let price = (this.course.price / 100).toFixed(2);
                         window.alert(`Status: ${paymentResult.status}\nPrice: ${paymentResult.currency} ${price}`);
                         this.modalElement.close();
+                    },
+                    (error) => {
+                        MaterializeService.toast(error.error);
                     }
                 );
             }

@@ -18,3 +18,9 @@ export interface IPaymentResult {
     amount: number;
     currency: string;
 }
+
+export interface IRefundResult {
+    amount: number;
+    status: string;
+    failure_reason: string;
+}

@@ -1,3 +1,4 @@
+from course_app.choices import StatusChoices
 from course_app.models import Course
 from payments_app.choices import PaymentStatusChoices
 from payments_app.models import Card, PaymentCourse
@@ -41,6 +42,9 @@ def validate_buy_course_data(user, course_id, pm_id):
 def validate_refund_course_data(user, course_id):
     if not Course.objects.filter(id=course_id).exists():
         raise ValidationError({'course_id': 'Unknown course ID'})
+
+    if Course.objects.filter(id=course_id, status=StatusChoices.CLOSED).exists():
+        raise ValidationError({'course_id': 'This course is over! You cannot refund!'})
 
     queryset = PaymentCourse.objects.filter(
         course_id=course_id,

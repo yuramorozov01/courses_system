@@ -36,3 +36,18 @@ def validate_buy_course_data(user, course_id, pm_id):
         raise ValidationError({'pm_id': 'Unknown payment method ID'})
 
     return course_id, pm_id
+
+
+def validate_refund_course_data(user, course_id):
+    if not Course.objects.filter(id=course_id).exists():
+        raise ValidationError({'course_id': 'Unknown course ID'})
+
+    queryset = PaymentCourse.objects.filter(
+        course_id=course_id,
+        user=user,
+        payment__status=PaymentStatusChoices.SUCCEEDED
+    )
+    if not queryset.exists():
+        raise ValidationError({'course_id': 'You didn\'t purchase this course!'})
+
+    return course_id

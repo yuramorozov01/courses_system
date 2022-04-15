@@ -65,3 +65,7 @@ class StripePaymentService:
             amount_to_capture=amount_to_capture
         )
         return payment_intent
+
+    def create_refund(self, pi_id: str, amount: int = None) -> stripe.Refund:
+        refund = stripe.Refund.create(payment_intent=pi_id, amount=amount)
+        return refund

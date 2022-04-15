@@ -60,16 +60,14 @@ class PaymentService:
         )
         return payment
 
-    def buy_course(self, course_id: int, pm_id: str) -> Payment:
+    def buy_course(self, course: Course, card: Card) -> Payment:
         currency = 'eur'
-        course = Course.objects.get(id=course_id)
-        card = Card.objects.get(pm_id=pm_id)
 
         payment_intent = self._payment_service.create_payment_intent(
             course.price,
             currency,
             card.customer.stripe_id,
-            pm_id
+            card.pm_id
         )
         payment = self.create_payment(self._user, card.customer, payment_intent)
         PaymentCourse.objects.create(
@@ -99,3 +97,14 @@ class PaymentService:
         payment.status = payment_intent.status
         payment.save()
         return payment
+
+    def refund_money(self, course: Course) -> tuple:
+        payment_course = PaymentCourse.objects.get(user=self._user, course=course)
+        pi_id = payment_course.payment.payment_intent_id
+        refund = self._payment_service.create_refund(pi_id, amount=course.price)
+        failure_reason = ''
+        if refund.status == 'succeeded':
+            payment_course.delete()
+        else:
+            failure_reason = refund.failure_reason
+        return refund.amount, refund.status, failure_reason

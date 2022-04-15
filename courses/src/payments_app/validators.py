@@ -17,11 +17,11 @@ def validate_buy_course_data(user, course_id, pm_id):
         raise ValidationError({'course_id': 'You have already purchased this course!'})
 
     process_statuses = [
-            PaymentStatusChoices.REQUIRES_CONFIRMATION,
-            PaymentStatusChoices.REQUIRES_ACTION,
-            PaymentStatusChoices.PROCESSING,
-            PaymentStatusChoices.REQUIRES_CAPTURE,
-        ]
+        PaymentStatusChoices.REQUIRES_CONFIRMATION,
+        PaymentStatusChoices.REQUIRES_ACTION,
+        PaymentStatusChoices.PROCESSING,
+        PaymentStatusChoices.REQUIRES_CAPTURE,
+    ]
     queryset = PaymentCourse.objects.filter(
         course_id=course_id,
         user=user,

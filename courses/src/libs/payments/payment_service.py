@@ -1,4 +1,6 @@
 import arrow
+import stripe
+
 from course_app.models import Course
 from django.contrib.auth import get_user_model
 from libs.payments.exceptions import CustomerNotCreatedException
@@ -45,6 +47,19 @@ class PaymentService:
         )
         return card
 
+    def create_payment(self, user: User, customer: Customer, payment_intent: stripe.PaymentIntent) -> Payment:
+        payment = Payment.objects.create(
+            user=user,
+            payment_intent_id=payment_intent.id,
+            payment_method_id=payment_intent.payment_method,
+            amount=payment_intent.amount,
+            currency=payment_intent.currency,
+            customer=customer,
+            status=payment_intent.status,
+            created=arrow.get(payment_intent.created).datetime
+        )
+        return payment
+
     def buy_course(self, course_id: int, pm_id: str) -> Payment:
         currency = 'eur'
         course = Course.objects.get(id=course_id)
@@ -56,19 +71,31 @@ class PaymentService:
             card.customer.stripe_id,
             pm_id
         )
-        payment = Payment.objects.create(
-            user=self._user,
-            payment_intent_id=payment_intent.id,
-            payment_method_id=payment_intent.payment_method,
-            amount=payment_intent.amount,
-            currency=payment_intent.currency,
-            customer=card.customer,
-            status=payment_intent.status,
-            created=arrow.get(payment_intent.created).datetime
-        )
+        payment = self.create_payment(self._user, card.customer, payment_intent)
         PaymentCourse.objects.create(
             user=self._user,
             payment=payment,
             course=course
         )
+        return payment
+
+    def hold_money(self, amount: int, pm_id: str) -> Payment:
+        currency = 'eur'
+        card = Card.objects.get(pm_id=pm_id)
+
+        payment_intent = self._payment_service.create_payment_intent(
+            amount,
+            currency,
+            card.customer.stripe_id,
+            pm_id,
+            capture_method='manual'
+        )
+        payment = self.create_payment(self._user, card.customer, payment_intent)
+        return payment
+
+    def capture_money(self, payment: Payment, amount_to_capture: int = None) -> Payment:
+        pi_id = payment.payment_intent_id
+        payment_intent = self._payment_service.capture_money(pi_id, amount_to_capture=amount_to_capture)
+        payment.status = payment_intent.status
+        payment.save()
         return payment

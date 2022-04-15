@@ -59,13 +59,9 @@ class StripePaymentService:
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
         return payment_intent
 
-    def hold_money(self, amount: int, currency: str, customer_id: str, pm_id: str) -> stripe.PaymentIntent:
-        payment_intent = self.create_payment_intent(amount, currency, customer_id, pm_id, capture_method='manual')
-        return payment_intent
-
-    def capture_money(self, pm_id: str, amount_to_capture: int = None) -> stripe.PaymentIntent:
+    def capture_money(self, pi_id: str, amount_to_capture: int = None) -> stripe.PaymentIntent:
         payment_intent = stripe.PaymentIntent.capture(
-            pm_id,
+            pi_id,
             amount_to_capture=amount_to_capture
         )
         return payment_intent

@@ -1,3 +1,4 @@
+import arrow
 from course_app.choices import StatusChoices
 from course_app.models import Course
 from payments_app.choices import PaymentStatusChoices
@@ -16,6 +17,10 @@ def validate_buy_course_data(user, course_id, pm_id):
     )
     if queryset.exists():
         raise ValidationError({'course_id': 'You have already purchased this course!'})
+
+    course = Course.objects.get(id=course_id)
+    if course.ends_at < arrow.now().date():
+        raise ValidationError({'course_id': 'Course has already been finished!'})
 
     process_statuses = [
         PaymentStatusChoices.REQUIRES_CONFIRMATION,

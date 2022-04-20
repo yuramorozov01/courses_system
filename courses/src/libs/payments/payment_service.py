@@ -63,13 +63,16 @@ class PaymentService:
     def buy_course(self, course: Course, card: Card) -> Payment:
         currency = 'eur'
 
-        payment_intent = self._payment_service.create_payment_intent(
-            course.price,
-            currency,
-            card.customer.stripe_id,
-            card.pm_id
-        )
-        payment = self.create_payment(self._user, card.customer, payment_intent)
+        if arrow.now().date() < course.starts_at:
+            payment = self.hold_money(course.price, card.pm_id)
+        else:
+            payment_intent = self._payment_service.create_payment_intent(
+                course.price,
+                currency,
+                card.customer.stripe_id,
+                card.pm_id
+            )
+            payment = self.create_payment(self._user, card.customer, payment_intent)
         PaymentCourse.objects.create(
             user=self._user,
             payment=payment,

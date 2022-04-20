@@ -27,6 +27,10 @@ app.conf.beat_schedule = {
     'calc_amount_of_students_every_5_min': {
         'task': 'course_app.tasks.CalcAmountOfStudentsInCourseTask',
         'schedule': crontab(minute='*/5'),
+    },
+    'daily_at_midnight_capture_money_on_started_courses': {
+        'task': 'payments_app.tasks.CaptureStartedCoursesTask',
+        'schedule': crontab(minute=0, hour=0),
     }
 }
 
@@ -38,6 +42,10 @@ app.conf.task_routes = {
     'course_app.tasks.CalcAmountOfStudentsInCourseTask': {
         'queue': 'default',
         'priority': 8,
+    },
+    'payments_app.tasks.CaptureStartedCoursesTask': {
+        'queue': 'default',
+        'priority': 1,
     },
     'send_new_mark_email': {
         'queue': 'email',

@@ -13,13 +13,12 @@ class CaptureStartedCoursesTask(CeleryTask):
     def run(self, *args, **kwargs):
         today = arrow.now().date()
         courses = Course.objects.filter(
-            starts_at=today
+            starts_at=today,
+            payments__payment__status=PaymentStatusChoices.REQUIRES_CAPTURE
         )
         result = []
         for course in courses:
-            course.status = CourseStatusChoices.OPEN
-            course.save()
-            payments_courses = course.payments.filter(payment__status=PaymentStatusChoices.REQUIRES_CAPTURE)
+            payments_courses = course.payments.all()
             course_result = {
                 'course_id': course.id,
                 'payments': [],

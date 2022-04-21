@@ -24,9 +24,9 @@ app.conf.beat_schedule = {
         'task': 'task_app.tasks.SendEmailWithUnreviewedTasksTask',
         'schedule': crontab(minute=0, hour=0),
     },
-    'calc_amount_of_students_every_5_min': {
+    'calc_amount_of_students_every_30_min': {
         'task': 'course_app.tasks.CalcAmountOfStudentsInCourseTask',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='*/30'),
     },
     'daily_at_midnight_capture_money_on_started_courses': {
         'task': 'payments_app.tasks.CaptureStartedCoursesTask',

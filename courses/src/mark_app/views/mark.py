@@ -11,7 +11,6 @@ from mark_app.tasks import SendNewMarkEmailTask
 from rest_framework import permissions, serializers, viewsets
 from task_app.models import Task
 from task_app.permissions import IsTaskAuthorOrCourseTeacher
-
 from ws_app.consts import WS_MARK_UPDATE_EVENT_KEY
 from ws_app.utils import send_ws_notification_to_groups
 
@@ -106,8 +105,6 @@ class MarkViewSet(viewsets.ModelViewSet):
                         task_statement_title,
                         mark_value,
                     ],
-                    queue='email',
-                    priority=9,
                 )
         except Task.DoesNotExist:
             raise serializers.ValidationError('You can add marks only in teaching courses')

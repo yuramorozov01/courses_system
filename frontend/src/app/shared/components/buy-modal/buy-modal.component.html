@@ -1,0 +1,37 @@
+<div id="modal" class="modal modal-fixed-footer" #modal>
+    <div class="modal-content">
+        <h4>Buy course</h4>
+        <br>
+        <div class="input-field" *ngIf="course">
+            <input id="title" type="text" [ngModel]="course.title" [readOnly]="true">
+            <label class="active" for="title">Title</label>
+        </div>
+        <div class="input-field" *ngIf="course">
+            <input id="starts_at" type="text" [ngModel]="course.starts_at" [readOnly]="true">
+            <label class="active" for="starts_at">Start date</label>
+        </div>
+        <div class="input-field" *ngIf="course">
+            <input id="ends_at" type="text" [ngModel]="course.ends_at" [readOnly]="true">
+            <label class="active" for="ends_at">End date</label>
+        </div>
+        <div class="input-field" *ngIf="course">
+            <input id="price" type="number" [ngModel]="course.price / 100 | number : '1.2-2'" [readOnly]="true">
+            <label class="active" for="price">Price (EUR)</label>
+        </div>
+        <form [formGroup]="form">
+            <div class="input-field">
+                <div *ngIf="cards$ | async as cards;">
+                    <label>Card</label>
+                    <select class="browser-default" id="card" formControlName="pm_id" required>
+                        <option [ngValue]="null" disabled>Choose your card</option>
+                        <option *ngFor="let card of cards" [ngValue]="card.pm_id">****{{ card.last4 }} {{ card.brand.toUpperCase() }} {{ card.exp_month }}/{{ card.exp_year }} {{ card.name }}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <button class="waves-effect waves-green btn-flat" (click)="buy()">Buy</button>
+    </div>
+</div>

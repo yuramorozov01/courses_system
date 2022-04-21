@@ -1,0 +1,63 @@
+<body>
+    <header>
+        <nav>
+            <div class="nav-wrapper teal">
+                <a routerLink="/" class="brand-logo white-text">{{ title }}</a>
+                <a data-target="mobile-ver" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li class="bold" *ngFor="let link of links">
+                        <a class="waves-effect waves-orange white-text" [routerLink]="[link.url]">{{ link.name }}</a>
+                    </li>
+
+                    <li class="bold last" *ngIf="authService.isAuthenticated()">
+                        <a href="#" class="waves-effect waves-orange white-text" (click)="logout($event)">Exit</a>
+                    </li>
+
+                    <li class="bold" *ngIf="!authService.isAuthenticated()">
+                        <a class="waves-effect waves-orange white-text" [routerLink]="['/login']">Login</a>
+                    </li>
+                    <li class="bold last" *ngIf="!authService.isAuthenticated()">
+                        <a class="waves-effect waves-orange white-text" [routerLink]="['/register']">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <ul class="sidenav" id="mobile-ver">
+            <li class="bold" *ngFor="let link of links" routerLinkActive="active">
+                <a class="waves-effect waves-orange" [routerLink]="[link.url]">{{ link.name }}</a>
+            </li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+
+    <footer class="row page-footer teal">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Courses</h5>
+                    <p class="grey-text text-lighten-4"></p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li class="bold" *ngFor="let link of links">
+                            <a class="grey-text text-lighten-3" [routerLink]="[link.url]">{{ link.name }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2022 Courses Morozov
+                <a class="grey-text text-lighten-4 right" href="https://github.com/yuramorozov01/courses_system">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>

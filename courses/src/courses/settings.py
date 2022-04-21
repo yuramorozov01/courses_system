@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'mark_app',
 
     'ws_app',
+
+    'payments_app',
 ]
 
 MIDDLEWARE = [
@@ -224,3 +226,8 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=True,
 )
+
+
+# Stripe configuration
+STRIPE_API_KEY = config('STRIPE_API_KEY')
+STRIPE_API_SECRET_KEY = config('STRIPE_API_SECRET_KEY')

@@ -6,10 +6,10 @@ from course_app.serializers import (CourseAddTeachersAndStudentsSerializer,
                                     CourseDetailsSerializer,
                                     CourseShortDetailsSerializer,
                                     CourseUpdateFullSerializer)
+from payments_app.choices import PaymentStatusChoices
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from payments_app.choices import PaymentStatusChoices
 
 
 class CourseViewSet(viewsets.ModelViewSet):

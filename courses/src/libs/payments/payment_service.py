@@ -1,6 +1,5 @@
 import arrow
 import stripe
-
 from course_app.models import Course
 from django.contrib.auth import get_user_model
 from libs.payments.exceptions import CustomerNotCreatedException

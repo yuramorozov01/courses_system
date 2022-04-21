@@ -3,8 +3,8 @@ from celery import Task as CeleryTask
 from course_app.models import Course
 from courses.celery import app
 from django.db.transaction import atomic
-from payments_app.choices import PaymentStatusChoices
 from libs.payments import PaymentService
+from payments_app.choices import PaymentStatusChoices
 
 
 class CaptureStartedCoursesTask(CeleryTask):

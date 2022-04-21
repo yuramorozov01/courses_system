@@ -1,6 +1,6 @@
 import arrow
-from course_app.choices import StatusChoices as CourseStatusChoices
 from celery import Task as CeleryTask
+from course_app.choices import StatusChoices as CourseStatusChoices
 from course_app.models import Course
 from courses.celery import app
 from django.db.models import Count

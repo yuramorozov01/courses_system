@@ -2,7 +2,8 @@ from course_app.models import Course
 from libs.payments import PaymentService
 from payments_app.models import Card
 from payments_app.serializers import CardShortDetailsSerializer
-from payments_app.validators import validate_buy_course_data, validate_refund_course_data
+from payments_app.validators import (validate_buy_course_data,
+                                     validate_refund_course_data)
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
